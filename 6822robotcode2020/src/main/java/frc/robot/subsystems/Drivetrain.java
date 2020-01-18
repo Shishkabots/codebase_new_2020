@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.ctre.phoenix.motorcontrol.can.*;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class DriveTrain extends Subsystem {
 
     // Put methods for controlling this subsystem
@@ -18,6 +20,7 @@ public class DriveTrain extends Subsystem {
 	{
         drivy = Robot.m_drive;
         reverse = true;
+        SmartDashboard.putData(drivy);
 		//super("DriveTrain",0.2,0,0);
         //setAbsoluteTolerance(0.05);
         
