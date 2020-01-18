@@ -68,6 +68,8 @@ public class Robot extends TimedRobot {
 
   public static OI m_oi;
 
+  public static AHRS gyro;
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -85,6 +87,8 @@ public class Robot extends TimedRobot {
     m_drivetrain = new DriveTrain();
 
     m_oi = new OI();
+
+    gyro = new AHRS(SPI.Port.kMXP);
   }
 
 
