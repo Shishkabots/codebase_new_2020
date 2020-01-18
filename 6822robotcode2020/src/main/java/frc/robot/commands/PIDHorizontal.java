@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class PIDturn extends Command {
+public class PIDHorizontal extends Command {
     public AHRS gyro = Robot.gyro; // angles are in degrees
     public double t; // t = target X-Coord
     // double P = 0.027;
@@ -31,7 +31,7 @@ public class PIDturn extends Command {
     int itersComplete = 20;
 
     //m_drivetrain is a drivetrain subsystem btw
-    public PIDturn(double tt) {
+    public PIDHorizontal(double tt) {
         t = tt;
         requires(Robot.m_drivetrain);
     }
