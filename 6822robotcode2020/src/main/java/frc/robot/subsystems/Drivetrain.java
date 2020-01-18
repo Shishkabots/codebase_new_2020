@@ -20,7 +20,6 @@ public class DriveTrain extends Subsystem {
 	{
         drivy = Robot.m_drive;
         reverse = true;
-        SmartDashboard.putData(drivy);
 		//super("DriveTrain",0.2,0,0);
         //setAbsoluteTolerance(0.05);
         
