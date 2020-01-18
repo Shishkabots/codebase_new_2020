@@ -18,7 +18,6 @@ import java.util.*;
     public class VisionController{
     Thread m_visionThread;
 
-    @Override
     public VisionController() {
         m_visionThread = new Thread(() -> {
         // Get the UsbCamera from CameraServer
