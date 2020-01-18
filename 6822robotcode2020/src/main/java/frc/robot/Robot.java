@@ -41,7 +41,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.SPI;
-//import com.kauailabs.navx.frc.AHRS;
+//limport com.kauailabs.navx.frc.AHRS;
 
 public class Robot extends TimedRobot {
 
@@ -79,8 +79,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
     m_drive = new DifferentialDrive(drive1, drive2);
-    SmartDashboard.putData(m_drive);
+
     m_drivetrain = new DriveTrain();
 
     m_oi = new OI();
@@ -91,7 +92,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
   }
 
-  
+
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
@@ -113,9 +114,16 @@ public class Robot extends TimedRobot {
     }
   }
 
+
+  @Override
+  public void teleopInit() {
+    new TeleOpCommands().start();
+  }
   
+
   @Override
   public void teleopPeriodic() {
+    Scheduler.getInstance().run();
   }
 
   
