@@ -44,6 +44,30 @@ import edu.wpi.first.wpilibj.SPI;
 //import com.kauailabs.navx.frc.AHRS;
 
 public class Robot extends TimedRobot {
+
+  public static WPI_VictorSPX climb1;
+  public static WPI_VictorSPX climb2;
+
+  public static WPI_VictorSPX storage;
+  public static WPI_VictorSPX intake;
+
+  public static WPI_VictorSPX arm1;
+  public static WPI_VictorSPX arm2;
+
+  public static WPI_TalonSRX wheel1;
+  public static WPI_TalonSRX wheel2;
+
+  public static WPI_TalonFX drive1;
+  public static WPI_TalonFX drive2;
+  public static WPI_TalonFX slave1;
+  public static WPI_TalonFX slave2;
+
+  public static DifferentialDrive m_drive;
+
+  public static DriveTrain m_drivetrain;
+
+  public static OI m_oi;
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -56,6 +80,11 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
+    m_drive = new DifferentialDrive(drive1, drive2);
+
+    m_drivetrain = new DriveTrain();
+
+    m_oi = new OI();
   }
 
 
