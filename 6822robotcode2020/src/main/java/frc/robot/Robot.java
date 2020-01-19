@@ -51,11 +51,11 @@ public class Robot extends TimedRobot {
   public static WPI_VictorSPX storage;
   public static WPI_VictorSPX intake;
 
-  public static WPI_VictorSPX arm1;
+  public static WPI_TalonSRX arm1;
   public static WPI_VictorSPX arm2;
 
-  public static WPI_TalonSRX wheel1;
-  public static WPI_TalonSRX wheel2;
+  public static WPI_TalonSRX shoot1;
+  public static WPI_VictorSPX shoot2;
 
   public static WPI_TalonFX drive1;
   public static WPI_TalonFX drive2;
@@ -65,6 +65,11 @@ public class Robot extends TimedRobot {
   public static DifferentialDrive m_drive;
 
   public static DriveTrain m_drivetrain;
+  public static Arm m_arm;
+  public static Ballintake m_intake;
+  public static Climber m_climber;
+  public static Shooter m_shooter;
+  public static StorageFeed m_storage;
 
   public static OI m_oi;
 
@@ -86,9 +91,14 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
 
     m_drive = new DifferentialDrive(drive1, drive2);
+    m_drivetrain = new DriveTrain(m_drive);
 
-    m_drivetrain = new DriveTrain();
-
+    m_arm = new Arm(arm1, arm2);
+    m_intake = new Ballintake(intake);
+    m_climber = new Climber(climb1, climb2);
+    m_shooter = new Shooter(shoot1, shoot2);
+    m_storage = new StorageFeed(storage);
+    
     m_oi = new OI();
 
     gyro = new AHRS(SPI.Port.kMXP);
