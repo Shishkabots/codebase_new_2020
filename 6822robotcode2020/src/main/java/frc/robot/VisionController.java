@@ -20,6 +20,23 @@ import java.util.*;
     Thread m_visionThread;
    public static  CvSink cvSink; // publicstatic so that it can be accessed by all the classes
 
+   public double[] findCenter(Mat img) {
+    //[x,y]
+    double[] centerCoor = {-1, -1}; // set in case of exception
+
+    GripPipeline pipeline = new GripPipeline();
+    pipeline.process(img);
+
+    if(pipeline.filterContoursOutput().size() == 1){
+        Moments moments = Imgproc.moments(pipeline.filterContoursOutput().get(0));
+        centerCoor[0] = moments.get_m10() / moments.get_m00();
+        centerCoor[1] = moments.get_m01() / moments.get_m00();
+        return centerCoor;
+    }
+    return centerCoor;
+}
+
+
     public VisionController() {
         m_visionThread = new Thread(() -> {
         // Get the UsbCamera from CameraServer
@@ -34,24 +51,7 @@ import java.util.*;
             = CameraServer.getInstance().putVideo("Rectangle", 640, 480);
 
         // Mats are very memory expensive. Lets reuse this Mat.
-        Mat img = new Mat();
-
-        public double[] findCenter(Mat img) {
-            //[x,y]
-            double[] centerCoor = {-1, -1}; // set in case of exception
-    
-            GripPipeline pipeline = new GripPipeline();
-            pipeline.process(img);
-    
-            if(pipeline.filterContoursOutput().size() == 1){
-                Moments moments = Imgproc.moments(pipeline.filterContoursOutput().get(0));
-                centerCoor[0] = moments.get_m10() / moments.get_m00();
-                centerCoor[1] = moments.get_m01() / moments.get_m00();
-                return centerCoor;
-            }
-            return centerCoor;
-        }
-
+        Mat img = new Mat();        
         // This cannot be 'true'. The program will never exit if it is. This
         // lets the robot stop this thread when restarting robot code or
         // deploying.
