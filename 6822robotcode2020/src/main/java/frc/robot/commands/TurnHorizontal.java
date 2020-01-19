@@ -12,15 +12,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class TurnHorizontal extends Command {
-    double P = 0.01;
-    int cameraX; //what does this equal
-    int targetX; // what does this equal
-    int t;
-    int error = cameraX - targetX;
+    double P = 0.01; // tune this
+    int cameraX = 320;
+    int errorX = 0;
+    int targetX;
     double voltage = 0;
-    public TurnHorizontal(int tt) {
+    public TurnHorizontal(int diffX) {
         requires(Robot.m_drivetrain);
-        t = tt;
+        errorX = diffX;
     }
     
     protected void initialize() {
@@ -29,9 +28,8 @@ public class TurnHorizontal extends Command {
     }
     
     protected void execute() {
-        while (cameraX != targetX) {
-            error = cameraX - targetX;
-            voltage = P * error;
+        while (errorX != 0) {
+            voltage = P * errorX;
             Robot.m_drivetrain.moveWithCurve(0,voltage,true);
         }
 
