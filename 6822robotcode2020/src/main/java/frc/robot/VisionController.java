@@ -80,7 +80,14 @@ public class VisionController {
                 {
                     new TurnHorizontal(errorx).start();
                 }
-                
+                else if(Math.abs(errorx)>2)
+                {
+                    new TurnVertical(errory).start();
+                }
+                else
+                {
+                    new StopTurning().start();
+                }
                 // Put a rectangle on the image
                 // Imgproc.rectangle(img, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
                 // Give the output stream a new image to display

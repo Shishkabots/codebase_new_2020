@@ -86,18 +86,6 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-<<<<<<< Updated upstream
-    m_drive = new DifferentialDrive(drive1, drive2);
-    m_drivetrain = new DriveTrain(m_drive);
-
-    m_arm = new Arm(arm1, arm2);
-    m_intake = new Ballintake(intake);
-    m_climber = new Climber(climb1, climb2);
-    m_shooter = new Shooter(shoot1, shoot2);
-    m_storage = new StorageFeed(storage);
-    
-    m_oi = new OI();
-=======
 
     climb1 = new WPI_VictorSPX(1);
     climb2 = new WPI_VictorSPX(2);
@@ -105,12 +93,11 @@ public class Robot extends TimedRobot {
     storage = new WPI_VictorSPX(3);
     intake = new WPI_VictorSPX(4);
 
-    arm1 = new WPI_VictorSPX(5);
+    arm1 = new WPI_TalonSRX(5);
     arm2 = new WPI_VictorSPX(6);
->>>>>>> Stashed changes
 
-    wheel1 = new WPI_TalonSRX(7);
-    wheel2 = new WPI_TalonSRX(8);
+    shoot1 = new WPI_TalonSRX(7);
+    shoot2 = new WPI_VictorSPX(8);
 
     drive1 = new WPI_TalonFX(9);
     drive2 = new WPI_TalonFX(10);
@@ -119,7 +106,7 @@ public class Robot extends TimedRobot {
 
     m_drive = new DifferentialDrive(drive1, drive2);
     SmartDashboard.putData(m_drive);
-    m_drivetrain = new DriveTrain();
+    m_drivetrain = new DriveTrain(m_drive);
 
     m_oi = new OI();
   }
