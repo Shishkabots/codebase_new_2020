@@ -58,17 +58,17 @@ import java.util.*;
         while (!Thread.interrupted()) {
             // Tell the CvSink to grab a frame from the camera and put it
             // in the source mat.  If there is an error notify the output.
-            if (cvSink.grabFrame(input) == 0) {
+            if (cvSink.grabFrame(img) == 0) {
             // Send the output the error.
             outputStream.notifyError(cvSink.getError());
             // skip the rest of the current iteration
             continue;
             }
             // Put a rectangle on the image
-            Imgproc.rectangle(input, new Point(100, 100), new Point(400, 400),
+            Imgproc.rectangle(img, new Point(100, 100), new Point(400, 400),
                 new Scalar(255, 255, 255), 5);
             // Give the output stream a new image to display
-            outputStream.putFrame(input);
+            outputStream.putFrame(img);
         }
         });
         m_visionThread.setDaemon(true);
