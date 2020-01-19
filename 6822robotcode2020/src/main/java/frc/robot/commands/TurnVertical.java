@@ -12,9 +12,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class TurnVertical extends Command {
-    
-    public TurnVertical(double tt) {
+    double P = 0.08; // tune this
+    int cameraY = 240;
+    int errorY = 0;
+    int targetY;
+    double voltage = 0;
+    public TurnVertical(int goalY) {
         requires(Robot.m_drivetrain);
+        targetY= goalY;
     }
     
     protected void initialize() {
@@ -23,6 +28,10 @@ public class TurnVertical extends Command {
     }
     
     protected void execute() {
+        while (errorY != 0) {
+            voltage = P * errorY;
+            Robot.m_drivetrain.moveWithCurve(0,voltage,true);
+        }
     }
 
     protected boolean isFinished() {
