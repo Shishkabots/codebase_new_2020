@@ -57,10 +57,10 @@ public class Robot extends TimedRobot {
   public static WPI_TalonSRX shoot1;
   public static WPI_VictorSPX shoot2;
 
-  public static WPI_TalonFX driveL;
-  public static WPI_TalonFX driveR;
-  public static WPI_TalonFX slaveL;
-  public static WPI_TalonFX slaveR;
+  public static WPI_TalonFX drive1;
+  public static WPI_TalonFX drive2;
+  public static WPI_TalonFX slave1;
+  public static WPI_TalonFX slave2;
 
   public static DifferentialDrive m_drive;
 
@@ -72,8 +72,8 @@ public class Robot extends TimedRobot {
   public static StorageFeed m_storage;
 
   public static OI m_oi;
-
-
+  public static VisionController visionController;
+  
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -86,6 +86,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
+    visionController = new VisionController();
 
     climb1 = new WPI_VictorSPX(1);
     climb2 = new WPI_VictorSPX(2);
@@ -99,12 +100,12 @@ public class Robot extends TimedRobot {
     shoot1 = new WPI_TalonSRX(7);
     shoot2 = new WPI_VictorSPX(8);
 
-    driveL = new WPI_TalonFX(9);
-    driveR = new WPI_TalonFX(10);
-    slaveL = new WPI_TalonFX(11);
-    slaveR = new WPI_TalonFX(12);
+    drive1 = new WPI_TalonFX(9);
+    drive2 = new WPI_TalonFX(10);
+    slave1 = new WPI_TalonFX(11);
+    slave2 = new WPI_TalonFX(12);
 
-    m_drive = new DifferentialDrive(driveL, driveR);
+    m_drive = new DifferentialDrive(drive1, drive2);
     SmartDashboard.putData(m_drive);
     m_drivetrain = new DriveTrain(m_drive);
 

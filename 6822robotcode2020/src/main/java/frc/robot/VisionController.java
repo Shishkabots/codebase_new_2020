@@ -28,7 +28,7 @@ public class VisionController {
 
     public static CvSink cvSink; // publicstatic so that it can be accessed by all the classes
     public static final int imgWidth = 640;
-    public static final int imgHeight = 320;
+    public static final int imgHeight = 480;
 
 
     public int[] findCenter(Mat img) {
@@ -46,7 +46,24 @@ public class VisionController {
         }
         return centerCoor;
     }
-
+    public void align(Mat img)
+    {
+        int[] center = findCenter(img);
+        int errorx = center[0] - imgWidth;
+        int errory = center[1] - imgHeight;
+        if(Math.abs(errorx)>2)
+        {
+            new TurnHorizontal(errorx).start();
+        }
+        else if(Math.abs(errorx)>2)
+        {
+            new TurnVertical(errory).start();
+        }
+        else
+        {
+            new StopTurning().start();
+        }
+    }
     public VisionController() {
         m_visionThread = new Thread(() -> {
             // Get the UsbCamera from CameraServer
@@ -72,21 +89,6 @@ public class VisionController {
                     outputStream.notifyError(cvSink.getError());
                     // skip the rest of the current iteration
                     continue;
-                }
-                int[] center = findCenter(img);
-                int errorx = center[0] - imgWidth;
-                int errory = center[1] - imgHeight;
-                if(Math.abs(errorx)>2)
-                {
-                    new TurnHorizontal(errorx).start();
-                }
-                else if(Math.abs(errorx)>2)
-                {
-                    new TurnVertical(errory).start();
-                }
-                else
-                {
-                    new StopTurning().start();
                 }
                 // Put a rectangle on the image
                 // Imgproc.rectangle(img, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
