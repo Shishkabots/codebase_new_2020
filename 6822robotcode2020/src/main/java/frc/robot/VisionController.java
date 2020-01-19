@@ -10,27 +10,30 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.vision.VisionThread;
 
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.*;
+import org.opencv.core.*;
 
 import java.util.*;
     public class VisionController{
     Thread m_visionThread;
+    
    public static  CvSink cvSink; // publicstatic so that it can be accessed by all the classes
 
-   public double[] findCenter(Mat img) {
+   public int[] findCenter(Mat img) {
     //[x,y]
-    double[] centerCoor = {-1, -1}; // set in case of exception
+    int[] centerCoor = {-1, -1};
 
     GripPipeline pipeline = new GripPipeline();
     pipeline.process(img);
-
+    ArrayList<MatOfPoint> contours =pipeline.filterContoursOutput();
+    Rect boundingRect = Imgproc.boundingRect(contours);
     if(pipeline.filterContoursOutput().size() == 1){
-        Moments moments = Imgproc.moments(pipeline.filterContoursOutput().get(0));
-        centerCoor[0] = moments.get_m10() / moments.get_m00();
-        centerCoor[1] = moments.get_m01() / moments.get_m00();
+         centerCoor[0] = boundingRect.x + (boundingRect.width() / 2.0);
+         centerCoor[1] = boundingRect.y + (boundingRect.height() / 2.0);
         return centerCoor;
     }
     return centerCoor;
