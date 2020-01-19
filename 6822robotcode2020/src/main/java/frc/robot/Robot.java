@@ -41,7 +41,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.SPI;
-import com.kauailabs.navx.frc.AHRS;
+//import com.kauailabs.navx.frc.AHRS;
 
 public class Robot extends TimedRobot {
 
@@ -73,16 +73,12 @@ public class Robot extends TimedRobot {
 
   public static OI m_oi;
 
-  public static AHRS gyro;
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  VisionThread visionThread;
-  public static final Object imgLock = new Object();
-  public static double centerX;
  
   @Override
   public void robotInit() {
@@ -90,6 +86,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
+<<<<<<< Updated upstream
     m_drive = new DifferentialDrive(drive1, drive2);
     m_drivetrain = new DriveTrain(m_drive);
 
@@ -100,21 +97,31 @@ public class Robot extends TimedRobot {
     m_storage = new StorageFeed(storage);
     
     m_oi = new OI();
+=======
 
-    gyro = new AHRS(SPI.Port.kMXP);
+    climb1 = new WPI_VictorSPX(1);
+    climb2 = new WPI_VictorSPX(2);
 
-    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-    camera.setResolution(300, 300);
+    storage = new WPI_VictorSPX(3);
+    intake = new WPI_VictorSPX(4);
 
-    visionThread = new VisionThread(camera, new GripPipeline(), pipeline -> {
-        if (!pipeline.filterContoursOutput().isEmpty()) {
-            Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-            synchronized (imgLock) {
-                centerX = r.x + (r.width / 2);
-            }
-        }
-    });
-    visionThread.start();
+    arm1 = new WPI_VictorSPX(5);
+    arm2 = new WPI_VictorSPX(6);
+>>>>>>> Stashed changes
+
+    wheel1 = new WPI_TalonSRX(7);
+    wheel2 = new WPI_TalonSRX(8);
+
+    drive1 = new WPI_TalonFX(9);
+    drive2 = new WPI_TalonFX(10);
+    slave1 = new WPI_TalonFX(11);
+    slave2 = new WPI_TalonFX(12);
+
+    m_drive = new DifferentialDrive(drive1, drive2);
+    SmartDashboard.putData(m_drive);
+    m_drivetrain = new DriveTrain();
+
+    m_oi = new OI();
   }
 
 
@@ -122,7 +129,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
   }
 
-
+  
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
@@ -144,16 +151,9 @@ public class Robot extends TimedRobot {
     }
   }
 
-
-  @Override
-  public void teleopInit() {
-    new TeleOpCommands().start();
-  }
   
-
   @Override
   public void teleopPeriodic() {
-    Scheduler.getInstance().run();
   }
 
   
