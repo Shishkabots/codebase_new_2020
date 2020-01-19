@@ -1,6 +1,16 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
+import frc.robot.VisionController;
+import frc.robot.GripPipeline;
+
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.*;
 
 import edu.wpi.first.wpilibj.command.Command;
 //import edu.wpi.first.wpilibj.AnalogGyro;
@@ -11,9 +21,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class PIDHorizontal extends Command {
+public class DriveHorizontal extends Command {
+    CvSink sink;
     public AHRS gyro = Robot.gyro; // angles are in degrees
-    public double t; // t = target X-Coord
+    public double thetaToTurn; // t = target X-Coord
+    private double centerX;
     // double P = 0.027;
     // double I = 0.016;
     // double D = 0.0001;
@@ -31,8 +43,8 @@ public class PIDHorizontal extends Command {
     int itersComplete = 20;
 
     //m_drivetrain is a drivetrain subsystem btw
-    public PIDHorizontal(double tt) {
-        t = tt;
+    public DriveHorizontal(double tt) {
+        thetaToTurn = tt;
         requires(Robot.m_drivetrain);
     }
     
@@ -42,7 +54,8 @@ public class PIDHorizontal extends Command {
     }
     
     protected void execute() {
-        error = t - gyro.getAngle(); // Error = Target - Actual; Should be the (target x-coord - actual x-coord)
+        sink = VisionController.cvSink; 
+        error = thetaToTurn - gyro.getAngle(); // Error = Target - Actual; 
         integral += (error * dt); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
         derivative = (error - previous_error) / dt;
         previous_error = error; //keep updating error to the most recently measured one
