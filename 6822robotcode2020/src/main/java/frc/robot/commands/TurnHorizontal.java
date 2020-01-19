@@ -17,7 +17,7 @@ public class TurnHorizontal extends Command {
     int targetX; // what does this equal
     int t;
     int error = cameraX - targetX;
-    double voltage 0;
+    double voltage = 0;
     public TurnHorizontal(int tt) {
         requires(Robot.m_drivetrain);
         t = tt;
