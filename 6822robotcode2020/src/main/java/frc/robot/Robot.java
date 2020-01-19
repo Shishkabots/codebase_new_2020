@@ -75,6 +75,9 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  VisionThread visionThread;
+  public static final Object imgLock = new Object();
+  public static double centerX;
  
   @Override
   public void robotInit() {
@@ -89,6 +92,19 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
 
     gyro = new AHRS(SPI.Port.kMXP);
+
+    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    camera.setResolution(300, 300);
+
+    visionThread = new VisionThread(camera, new GripPipeline(), pipeline -> {
+        if (!pipeline.filterContoursOutput().isEmpty()) {
+            Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+            synchronized (imgLock) {
+                centerX = r.x + (r.width / 2);
+            }
+        }
+    });
+    visionThread.start();
   }
 
 

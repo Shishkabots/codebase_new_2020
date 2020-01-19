@@ -43,7 +43,7 @@ public class DriveHorizontal extends Command {
     int itersComplete = 20;
 
     //m_drivetrain is a drivetrain subsystem btw
-    public DriveHorizontal(double tt) {
+    public DriveHorizontal(int tt) {
         thetaToTurn = tt;
         requires(Robot.m_drivetrain);
     }
@@ -54,7 +54,7 @@ public class DriveHorizontal extends Command {
     }
     
     protected void execute() {
-        sink = VisionController.cvSink; 
+        //sink = VisionController.cvSink; 
         error = thetaToTurn - gyro.getAngle(); // Error = Target - Actual; 
         integral += (error * dt); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
         derivative = (error - previous_error) / dt;

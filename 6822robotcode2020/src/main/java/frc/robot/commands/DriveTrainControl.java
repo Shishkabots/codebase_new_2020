@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
+import frc.robot.VisionController;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.Encoder;
@@ -15,6 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveTrainControl extends Command {
 
     //m_drivetrain is a drivetrain subsystem btw
+
+    Object n = Robot.imgLock;
+    double centx;
     public DriveTrainControl() {
         requires(Robot.m_drivetrain);
     }
@@ -32,6 +36,9 @@ public class DriveTrainControl extends Command {
     }
 
     protected void execute() {
+        synchronized(n) {
+            centx = Robot.centerX;
+        }
         double turboMultiplier = Robot.m_oi.boost.get() ? 2 : 1;
         //factor to multiply the speed by when we are on turbo mode
         double turnCoef = 0.5;
