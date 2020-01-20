@@ -15,10 +15,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
-
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.*;
+import org.opencv.core.*;
 
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -72,21 +81,46 @@ public class Robot extends TimedRobot {
   public static StorageFeed m_storage;
 
   public static OI m_oi;
-  public static VisionController visionController;
-  
+  public static Thread m_visionThread;
+  public static CvSink cvSink;
+
+  public static GripPipeline pipeline;
+  public static final int imgWidth = 640;
+  public static final int imgHeight = 480;
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
- 
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    
+    pipeline = new GripPipeline();
 
-    visionController = new VisionController();
+    m_oi = new OI();
+
+    m_visionThread = new Thread(() -> {
+      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+      camera.setResolution(640, 480);
+      cvSink = CameraServer.getInstance().getVideo();
+      CvSource outputStream = CameraServer.getInstance().putVideo("Rectangle", 640, 480);
+      Mat img = new Mat();
+      while (!Thread.interrupted()) {
+        if (cvSink.grabFrame(img) == 0) {
+          outputStream.notifyError(cvSink.getError());
+          continue;
+        }
+
+        m_oi.autoAlignButton.whenPressed(new AlignShooter());
+        outputStream.putFrame(img);
+      }
+    });
+    m_visionThread.setDaemon(true);
+    m_visionThread.start();
 
     climb1 = new WPI_VictorSPX(1);
     climb2 = new WPI_VictorSPX(2);
@@ -109,15 +143,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(m_drive);
     m_drivetrain = new DriveTrain(m_drive);
 
-    m_oi = new OI();
   }
-
 
   @Override
   public void robotPeriodic() {
   }
 
-  
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
@@ -125,26 +156,23 @@ public class Robot extends TimedRobot {
     System.out.println("Auto selected: " + m_autoSelected);
   }
 
-  
   @Override
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
+    case kCustomAuto:
+      // Put custom auto code here
+      break;
+    case kDefaultAuto:
+    default:
+      // Put default auto code here
+      break;
     }
   }
 
-  
   @Override
   public void teleopPeriodic() {
   }
 
-  
   @Override
   public void testPeriodic() {
   }
