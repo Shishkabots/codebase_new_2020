@@ -16,9 +16,9 @@ public class DriveTrain extends Subsystem {
     public static DifferentialDrive drivy;
     public static boolean reverse;
 
-	public DriveTrain()
+	public DriveTrain(DifferentialDrive d)
 	{
-        drivy = Robot.m_drive;
+        drivy = d;
         reverse = true;
 		//super("DriveTrain",0.2,0,0);
         //setAbsoluteTolerance(0.05);
