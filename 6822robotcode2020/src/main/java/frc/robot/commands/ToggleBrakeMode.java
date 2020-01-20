@@ -23,10 +23,10 @@ public class ToggleBrakeMode extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.driveL.setNeutralMode(NeutralMode.Brake);
-    Robot.driveR.setNeutralMode(NeutralMode.Brake);
-    Robot.slaveL.setNeutralMode(NeutralMode.Brake);
-    Robot.slaveR.setNeutralMode(NeutralMode.Brake);
+    Robot.drive1.setNeutralMode(NeutralMode.Brake);
+    Robot.drive2.setNeutralMode(NeutralMode.Brake);
+    Robot.slave1.setNeutralMode(NeutralMode.Brake);
+    Robot.slave2.setNeutralMode(NeutralMode.Brake);
   }
 
   // Called repeatedly when this Command is scheduled to run

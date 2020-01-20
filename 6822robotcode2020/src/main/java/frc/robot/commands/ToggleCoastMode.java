@@ -21,10 +21,10 @@ public class ToggleCoastMode extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.driveL.setNeutralMode(NeutralMode.Coast);
-    Robot.driveR.setNeutralMode(NeutralMode.Coast);
-    Robot.slaveL.setNeutralMode(NeutralMode.Coast);
-    Robot.slaveR.setNeutralMode(NeutralMode.Coast);
+    Robot.drive1.setNeutralMode(NeutralMode.Coast);
+    Robot.drive2.setNeutralMode(NeutralMode.Coast);
+    Robot.slave1.setNeutralMode(NeutralMode.Coast);
+    Robot.slave2.setNeutralMode(NeutralMode.Coast);
   }
 
   // Called repeatedly when this Command is scheduled to run
