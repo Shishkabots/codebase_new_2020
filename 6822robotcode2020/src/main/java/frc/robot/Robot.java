@@ -37,7 +37,7 @@ import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 //import frc.robot.GripPipeline;
-
+import java.util.ArrayList;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import edu.wpi.first.vision.VisionRunner;
@@ -93,12 +93,27 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  public int[] findCenter(Mat img) {
+    // [x,y]
+    int[] centerCoor = { -1, -1 };
+
+    Robot.pipeline.process(img);
+    ArrayList<MatOfPoint> contours = Robot.pipeline.filterContoursOutput();
+    if (Robot.pipeline.filterContoursOutput().size() == 1) {
+      Rect boundingRect = Imgproc.boundingRect(contours.get(0));
+      centerCoor[0] = (int) (boundingRect.x + (boundingRect.width / 2.0));
+      centerCoor[1] = (int) (boundingRect.y);
+      return centerCoor;
+    }
+    return centerCoor;
+  }
+
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    
+
     pipeline = new GripPipeline();
 
     m_oi = new OI();
@@ -115,7 +130,10 @@ public class Robot extends TimedRobot {
           continue;
         }
 
-        m_oi.autoAlignButton.whenPressed(new AlignShooter());
+        m_oi.autoAlignButton.whenPressed(new AlignShooter(img));
+        int[] center = findCenter(img);
+        Imgproc.circle(img, new Point(center[0],center[1]),2,new Scalar(255,0,0));
+        Imgproc.circle(img, new Point(imgWidth/2,imgHeight/2),2,new Scalar(255,0,0));
         outputStream.putFrame(img);
       }
     });

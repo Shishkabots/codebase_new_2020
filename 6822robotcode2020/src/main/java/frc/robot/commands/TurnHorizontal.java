@@ -32,9 +32,7 @@ public class TurnHorizontal extends Command {
         // this turn vertical command is only being called when the condition ^ is false
         voltage = P * errorX;
         Robot.m_drivetrain.moveWithCurve(0,voltage,true);
-        SmartDashboard.putString("Am I aligning?", "yes");
-
-        
+        SmartDashboard.putString("Am I aligning?", "yes");       
     }
 
     protected boolean isFinished() {

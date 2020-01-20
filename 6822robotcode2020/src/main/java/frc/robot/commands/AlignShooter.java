@@ -21,7 +21,9 @@ import org.opencv.core.*;
 import java.util.ArrayList;
 
 public class AlignShooter extends CommandGroup{
-    public int[] findCenter(Mat img) {
+    public Mat img;
+    public int errorx,errory;
+    public int[] findCenter() {
         // [x,y]
         int[] centerCoor = { -1, -1 };
 
@@ -35,11 +37,18 @@ public class AlignShooter extends CommandGroup{
         }
         return centerCoor;
     }
-    public void align(Mat img)
-    {
-        int[] center = findCenter(img);
-        int errorx = center[0] - Robot.imgWidth;
-        int errory = center[1] - Robot.imgHeight;
+    public AlignShooter(Mat img) {
+        this.img = img;
+    }
+    
+    protected void initialize() {
+
+    }
+    
+    protected void execute() {        
+        int[] center = findCenter();
+        errorx = center[0] - Robot.imgWidth;
+        errory = center[1] - Robot.imgHeight;
         if(Math.abs(errorx)>2)
         {
             addSequential(new TurnHorizontal(errorx));
@@ -54,17 +63,8 @@ public class AlignShooter extends CommandGroup{
         }
     }
 
-    public AlignShooter() {
-    }
-    
-    protected void initialize() {
-    }
-    
-    protected void execute() {        
-    }
-
     protected boolean isFinished() {
-        return false;
+        return (Math.abs(errorx) < 2 && Math.abs(errory) < 2);
     }
     
     protected void end() {
