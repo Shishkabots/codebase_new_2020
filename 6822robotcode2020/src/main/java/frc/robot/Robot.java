@@ -57,10 +57,10 @@ public class Robot extends TimedRobot {
   public static WPI_TalonSRX wheel1;
   public static WPI_TalonSRX wheel2;
 
-  public static WPI_TalonFX drive1;
-  public static WPI_TalonFX drive2;
-  public static WPI_TalonFX slave1;
-  public static WPI_TalonFX slave2;
+  public static WPI_TalonFX driveL;
+  public static WPI_TalonFX driveR;
+  public static WPI_TalonFX slaveL;
+  public static WPI_TalonFX slaveR;
 
   public static DifferentialDrive m_drive;
 
@@ -85,7 +85,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    m_drive = new DifferentialDrive(drive1, drive2);
+    m_drive = new DifferentialDrive(driveL, driveR);
 
     m_drivetrain = new DriveTrain();
 

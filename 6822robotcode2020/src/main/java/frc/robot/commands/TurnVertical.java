@@ -17,9 +17,9 @@ public class TurnVertical extends Command {
     int errorY = 0;
     int targetY;
     double voltage = 0;
-    public TurnVertical(int goalY) {
+    public TurnVertical(int diffY) {
         requires(Robot.m_drivetrain);
-        targetY= goalY;
+        errorY = diffY;
     }
     
     protected void initialize() {
@@ -27,11 +27,12 @@ public class TurnVertical extends Command {
         
     }
     
-    protected void execute() {
-        while (errorY != 0) {
-            voltage = P * errorY;
-            Robot.m_drivetrain.moveWithCurve(0,voltage,true);
-        }
+    protected void execute() { 
+        // The condition if error = 0 is being checked in visionController, thats why you dont need it here
+        // this turn vertical command is only being called when the condition ^ is false
+        voltage = P * errorY;
+        Robot.m_drivetrain.moveWithCurve(0,voltage,true);
+        SmartDashboard.putString("Am I turning vertically?", "yes");
     }
 
     protected boolean isFinished() {

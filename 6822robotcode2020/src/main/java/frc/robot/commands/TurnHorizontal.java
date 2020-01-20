@@ -28,10 +28,11 @@ public class TurnHorizontal extends Command {
     }
     
     protected void execute() {
-        while (errorX != 0) {
-            voltage = P * errorX;
-            Robot.m_drivetrain.moveWithCurve(0,voltage,true);
-        }
+        // The condition if error = 0 is being checked in visionController, thats why you dont need it here
+        // this turn vertical command is only being called when the condition ^ is false
+        voltage = P * errorX;
+        Robot.m_drivetrain.moveWithCurve(0,voltage,true);
+        SmartDashboard.putString("Am I aligning?", "yes");
 
         
     }
