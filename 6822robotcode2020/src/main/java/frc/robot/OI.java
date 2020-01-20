@@ -15,12 +15,13 @@ public class OI {
     public Button cancel = new JoystickButton(controllerOne, 10); // click the right joystick
     public Button turn180 = new JoystickButton(controllerOne, 9); // click the left joystick
     public Joystick controllerTwo = new Joystick(1); //also an xbox
-    public Button hatchButton = new JoystickButton(controllerTwo, 4); // Y
+    public Button climbbutton = new JoystickButton(controllerTwo, 4); // Y
     public Button flashcolor = new JoystickButton(controllerTwo, 1); // A
     public Button hatchleverup = new JoystickButton(controllerTwo, 3); // X
     public Button hatchleverdown = new JoystickButton(controllerTwo, 2); // B
     // cargo turning is axis/trigger control in the TurnCargo command
   
     public OI() {
+      climbbutton.whenPressed(new ActivateClimb());
     }
 }
