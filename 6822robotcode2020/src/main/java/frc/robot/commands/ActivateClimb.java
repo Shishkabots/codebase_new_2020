@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class ActivateClimb extends Command {
     public ActivateClimb() {
-        requires(Robot.m_climber);
+        //requires(Robot.m_climber);
     }
     Climber climb = Robot.m_climber;
     int time;
