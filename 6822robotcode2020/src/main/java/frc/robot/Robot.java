@@ -186,6 +186,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     double currentDistance = m_ultrasonic.getValue() * kValueToInches;
+    SmartDashboard.putString("Is it connected", "yes");
     SmartDashboard.putNumber("Auto Distance", currentDistance);
     switch (m_autoSelected) {
     case kCustomAuto:
