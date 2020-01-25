@@ -49,6 +49,8 @@ import edu.wpi.first.wpilibj.Spark;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+
 import edu.wpi.first.wpilibj.SPI;
 //import com.kauailabs.navx.frc.AHRS;
 
@@ -87,6 +89,11 @@ public class Robot extends TimedRobot {
   public static GripPipeline pipeline;
   public static final int imgWidth = 640;
   public static final int imgHeight = 480;
+
+  private static final int kUltrasonicPort = 0;
+  private static final double kValueToInches = 0.125;
+
+  private final AnalogInput m_ultrasonic = new AnalogInput(kUltrasonicPort);
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -161,6 +168,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(m_drive);
     m_drivetrain = new DriveTrain(m_drive);
 
+    
+
   }
 
   @Override
@@ -176,6 +185,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    double currentDistance = m_ultrasonic.getValue() * kValueToInches;
+    SmartDashboard.putNumber("Auto Distance", currentDistance);
     switch (m_autoSelected) {
     case kCustomAuto:
       // Put custom auto code here
@@ -189,6 +200,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    double currentDistance = m_ultrasonic.getValue() * kValueToInches;
+    SmartDashboard.putNumber("Teleop Distance", currentDistance);
   }
 
   @Override
