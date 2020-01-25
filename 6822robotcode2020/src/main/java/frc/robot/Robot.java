@@ -93,6 +93,8 @@ public class Robot extends TimedRobot {
   private static final int kUltrasonicPort = 0;
   private static final double kValueToInches = 0.125;
 
+  public static double theta = 0;
+
   private final AnalogInput m_ultrasonic = new AnalogInput(kUltrasonicPort);
 
   private static final String kDefaultAuto = "Default";
@@ -186,7 +188,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     double currentDistance = m_ultrasonic.getValue() * kValueToInches;
-    SmartDashboard.putString("Is it connected", "yes");
     SmartDashboard.putNumber("Auto Distance", currentDistance);
     switch (m_autoSelected) {
     case kCustomAuto:
