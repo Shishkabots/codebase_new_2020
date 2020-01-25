@@ -91,8 +91,9 @@ public class Robot extends TimedRobot {
   public static final int imgHeight = 480;
 
   private static final int kUltrasonicPort = 0;
-  private static final double kValueToInches = 0.125;
-
+  private static final double kValueToInches = 1;
+  private static final int minValue = 238;
+  private static final double mvPer5mm = 0.004883;
   public static double theta = 0;
 
   private final AnalogInput m_ultrasonic = new AnalogInput(kUltrasonicPort);
@@ -102,6 +103,8 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  private int cont;
+  
   public int[] findCenter(Mat img) {
     // [x,y]
     int[] centerCoor = { -1, -1 };
@@ -139,7 +142,8 @@ public class Robot extends TimedRobot {
           continue;
         }
 
-        m_oi.autoAlignButton.whenPressed(new AlignShooter(img));
+        //m_oi.autoAlignButton.whenPressed(new AlignShooter(img));
+        new AlignShooter(img);
         int[] center = findCenter(img);
         Imgproc.circle(img, new Point(center[0],center[1]),2,new Scalar(255,0,0));
         Imgproc.circle(img, new Point(imgWidth/2,imgHeight/2),2,new Scalar(255,0,0));
@@ -203,9 +207,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    double currentDistanceTeleop = m_ultrasonic.getValue() * kValueToInches;
-    SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
-    System.out.println("readings" + currentDistanceTeleop);
+    cont += 5;
+    //double currentDistanceTeleop = (m_ultrasonic.getAverageVoltage()-minVoltage) *  kValueToInches;
+    if(cont%200 == 0) {
+      double currentDistanceTeleop = 5.0*m_ultrasonic.getVoltage()/mvPer5mm;
+      SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
+      System.out.println("readings: " + currentDistanceTeleop);
+    }
   }
 
   @Override
