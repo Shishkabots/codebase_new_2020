@@ -93,21 +93,20 @@ public class Robot extends TimedRobot {
   public static final int imgWidth = 640;
   public static final int imgHeight = 480;
 
-  private static final int kUltrasonicPort = 0;
-  private static final double kValueToInches = 1;
-  private static final int minValue = 238;
-  private static final double mvPer5mm = 0.004883;
+  public static final int kUltrasonicPort = 0;
+  public static final double kValueToInches = 1;
+  public static final int minValue = 238;
+  public static final double mvPer5mm = 0.004883;
   public static double theta = 0;
 
-  private final AnalogInput m_ultrasonic = new AnalogInput(kUltrasonicPort);
+  public static final AnalogInput m_ultrasonic = new AnalogInput(kUltrasonicPort);
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
+  public static final double heightOuterPort = 2.4892; //units in meters
   private int cont;
-  
   public int[] findCenter(Mat img) {
     // [x,y]
     int[] centerCoor = { -1, -1 };
