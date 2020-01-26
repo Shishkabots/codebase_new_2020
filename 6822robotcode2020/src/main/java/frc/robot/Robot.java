@@ -95,6 +95,7 @@ public class Robot extends TimedRobot {
   private static final int minValue = 238;
   private static final double mvPer5mm = 0.004883;
   public static double theta = 0;
+  public static Spark led;
 
   private final AnalogInput m_ultrasonic = new AnalogInput(kUltrasonicPort);
 
