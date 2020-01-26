@@ -55,7 +55,7 @@ public class AlignShooter extends CommandGroup{
         }
         else if(Math.abs(errorx)>2)
         {
-            addSequential(new TurnVertical(errory));
+           // addSequential(new TurnVertical(errory));
         }
         else
         {
