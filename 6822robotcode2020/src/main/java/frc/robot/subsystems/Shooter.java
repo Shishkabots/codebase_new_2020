@@ -36,8 +36,13 @@ public class Shooter extends Subsystem {
         SmartDashboard.putNumber("Shooter Voltage", 0);
      }
 
-     public void shoot(double voltage) {
-        SmartDashboard.putNumber("Shooter Voltage", voltage);
-        lead.set(ControlMode.PercentOutput, voltage);
+     public void shoot(double voltageShoot) {
+        SmartDashboard.putNumber("Shooter Voltage", voltageShoot);
+        lead.set(ControlMode.PercentOutput, voltageShoot);
+     }
+
+     public void turnShooter(double voltageTurn) {
+        SmartDashboard.putNumber("Turning Voltage", voltageTurn);
+        lead.set(ControlMode.PercentOutput, voltageTurn);
      }
 }

@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
+import frc.robot.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj.command.Command;
 //import edu.wpi.first.wpilibj.AnalogGyro;
@@ -17,13 +18,17 @@ public class TurnHorizontal extends Command {
     int errorX = 0;
     int targetX;
     double voltage = 0;
+
     public TurnHorizontal(int diffX) {
         requires(Robot.m_drivetrain);
+        requires(Robot.m_shooter);
         errorX = diffX;
     }
-    
+
+    Shooter shoot = Robot.m_shooter;
+       
     protected void initialize() {
-        Robot.m_drivetrain.move(0, 0);
+        shoot.shoot(0);
         
     }
     
@@ -31,7 +36,7 @@ public class TurnHorizontal extends Command {
         // The condition if error = 0 is being checked in visionController, thats why you dont need it here
         // this turn vertical command is only being called when the condition ^ is false
         voltage = P * errorX;
-        Robot.m_drivetrain.moveWithCurve(0,voltage,true);
+        shoot.turnShooter(voltage);
         SmartDashboard.putString("Am I aligning?", "yes");     
           
     }
@@ -41,10 +46,10 @@ public class TurnHorizontal extends Command {
     }
     
     protected void end() {
-        Robot.m_drivetrain.move(0, 0);
+        shoot.shoot(0);
     }
 
     protected void interrupted() {
-    	Robot.m_drivetrain.move(0, 0);
+    	shoot.shoot(0);
     }
 }
