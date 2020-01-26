@@ -111,13 +111,12 @@ public class Robot extends TimedRobot {
   public int[] findCenter(Mat img) {
     // [x,y]
     int[] centerCoor = { -1, -1 };
-
-    Robot.pipeline.process(img);
     ArrayList<MatOfPoint> contours = Robot.pipeline.filterContoursOutput();
+    System.out.println(contours.size() + " contours");
     if (Robot.pipeline.filterContoursOutput().size() == 1) {
       Rect boundingRect = Imgproc.boundingRect(contours.get(0));
       centerCoor[0] = (int) (boundingRect.x + (boundingRect.width / 2.0));
-      centerCoor[1] = (int) (boundingRect.y);
+      centerCoor[1] = (int) (boundingRect.y+ (boundingRect.height/2));
       return centerCoor;
     }
     return centerCoor;
@@ -144,12 +143,14 @@ public class Robot extends TimedRobot {
           outputStream.notifyError(cvSink.getError());
           continue;
         }
-
         //m_oi.autoAlignButton.whenPressed(new AlignShooter(img));
-        new AlignShooter(img);
+        //new AlignShooter(img);
+        Robot.pipeline.process(img);
         int[] center = findCenter(img);
-        Imgproc.circle(img, new Point(center[0],center[1]),2,new Scalar(255,0,0));
-        Imgproc.circle(img, new Point(imgWidth/2,imgHeight/2),2,new Scalar(255,0,0));
+        //System.out.println(center[0]);
+        //System.out.println(center[1]);
+        Imgproc.circle(img, new Point(imgWidth/2,imgHeight/2),50,new Scalar(255,255,0));
+        Imgproc.circle(img, new Point(center[0],center[1]),50,new Scalar(255,255,0));
         outputStream.putFrame(img);
       }
     });

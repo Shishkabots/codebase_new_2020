@@ -43,16 +43,16 @@ public class GripPipeline implements VisionPipeline {
 	@Override	public void process(Mat source0) {
 		// Step HSL_Threshold0:
 		Mat hslThresholdInput = source0;
-		double[] hslThresholdHue = {76.89208633093525, 142.69696969696972};
+		double[] hslThresholdHue = {0.89208633093525, 179.69696969696972};
 		double[] hslThresholdSaturation = {103.19244604316546, 255.0};
-		double[] hslThresholdLuminance = {214.18165467625897, 255.0};
+		double[] hslThresholdLuminance = {232.18165467625897, 255.0};
 		hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation, hslThresholdLuminance, hslThresholdOutput);
 
 		// Step CV_dilate0:
 		Mat cvDilateSrc = hslThresholdOutput;
 		Mat cvDilateKernel = new Mat();
 		Point cvDilateAnchor = new Point(-1, -1);
-		double cvDilateIterations = 5.0;
+		double cvDilateIterations = 13.0;
 		int cvDilateBordertype = Core.BORDER_CONSTANT;
 		Scalar cvDilateBordervalue = new Scalar(-1);
 		cvDilate(cvDilateSrc, cvDilateKernel, cvDilateAnchor, cvDilateIterations, cvDilateBordertype, cvDilateBordervalue, cvDilateOutput);
@@ -61,7 +61,7 @@ public class GripPipeline implements VisionPipeline {
 		Mat cvErodeSrc = cvDilateOutput;
 		Mat cvErodeKernel = new Mat();
 		Point cvErodeAnchor = new Point(-1, -1);
-		double cvErodeIterations = 5.0;
+		double cvErodeIterations = 10.0;
 		int cvErodeBordertype = Core.BORDER_CONSTANT;
 		Scalar cvErodeBordervalue = new Scalar(-1);
 		cvErode(cvErodeSrc, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBordertype, cvErodeBordervalue, cvErodeOutput);
