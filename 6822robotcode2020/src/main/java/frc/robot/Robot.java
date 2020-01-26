@@ -102,8 +102,7 @@ public class Robot extends TimedRobot {
   public static Spark led;
 
   public static final AnalogInput m_ultrasonic0 = new AnalogInput(kUltrasonicPort0);
-  public static final AnalogInput m_ultrasonic1 = new AnalogInput(kUltrasonicPort1);
-
+  
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -141,8 +140,8 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    m_ultrasonic0.setGlobalSampleRate(10000);
     SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0*m_ultrasonic0.getVoltage()/mvPer5mm);
-    SmartDashboard.putNumber("Ultrasonic Sensor 1", 5.0*m_ultrasonic1.getVoltage()/mvPer5mm);
     pipeline = new GripPipeline();
 
     m_oi = new OI();
@@ -216,12 +215,11 @@ public class Robot extends TimedRobot {
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
     SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getAverageVoltage() / mvPer5mm);
-    SmartDashboard.putNumber("Ultrasonic Sensor 1", 5.0 * m_ultrasonic1.getAverageVoltage() / mvPer5mm);
   }
 
   @Override
   public void autonomousPeriodic() {
-    double currentDistanceAuto = ((m_ultrasonic0.getValue() + m_ultrasonic1.getValue()) / 2.0) * kValueToInches;
+    double currentDistanceAuto = ((m_ultrasonic0.getValue())) * kValueToInches;
     SmartDashboard.putNumber("auto reading", currentDistanceAuto);
     //System.out.println("auto reading" + currentDistanceAuto);
 
@@ -242,8 +240,7 @@ public class Robot extends TimedRobot {
     //double currentDistanceTeleop = (m_ultrasonic.getAverageVoltage()-minVoltage) *  kValueToInches;
     if(cont%200 == 0) {
       SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getAverageVoltage() / mvPer5mm);
-      SmartDashboard.putNumber("Ultrasonic Sensor 1", 5.0 * m_ultrasonic1.getAverageVoltage() / mvPer5mm);
-      double currentDistanceTeleop = 5.0 * (((m_ultrasonic0.getVoltage() + m_ultrasonic1.getVoltage()) / 2) / mvPer5mm);
+      double currentDistanceTeleop = 5.0 * (((m_ultrasonic0.getAverageVoltage() / mvPer5mm);
       SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
       //System.out.println("readings: " + currentDistanceTeleop);
     }
