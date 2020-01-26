@@ -68,6 +68,8 @@ public class Robot extends TimedRobot {
   public static WPI_TalonSRX shoot1;
   public static WPI_VictorSPX shoot2;
 
+  public static WPI_VictorSPX turret;
+
   public static WPI_TalonFX drive1;
   public static WPI_TalonFX drive2;
   public static WPI_TalonFX slave1;
@@ -81,6 +83,7 @@ public class Robot extends TimedRobot {
   public static Climber m_climber;
   public static Shooter m_shooter;
   public static StorageFeed m_storage;
+  public static Turret m_turret;
 
   public static OI m_oi;
   public static Thread m_visionThread;
@@ -169,6 +172,10 @@ public class Robot extends TimedRobot {
     drive2 = new WPI_TalonFX(10);
     slave1 = new WPI_TalonFX(11);
     slave2 = new WPI_TalonFX(12);
+
+    turret = new WPI_VictorSPX(13);
+
+    m_turret = new Turret(turret);
 
     m_drive = new DifferentialDrive(drive1, drive2);
     SmartDashboard.putData(m_drive);
