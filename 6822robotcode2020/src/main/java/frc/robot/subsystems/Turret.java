@@ -32,7 +32,7 @@ public class Turret extends Subsystem {
      }
 
      public void rotate(double voltage) {
-        SmartDashboard.putNumber("Turret Voltage", voltage);
+        SmartDashboard.putNumber("Turret turning voltage", voltage);
         turner.set(ControlMode.PercentOutput, voltage);
      }
 }
