@@ -59,7 +59,7 @@ public class AlignShooter extends CommandGroup{
         }
         else
         {
-            new StopTurning().start();
+            addSequential(new StopTurning());
         }
     }
 
