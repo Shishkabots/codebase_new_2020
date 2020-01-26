@@ -20,9 +20,14 @@ import org.opencv.imgproc.*;
 import org.opencv.core.*;
 import java.util.ArrayList;
 
-public class AlignShooter extends CommandGroup{
+public class AlignShooter extends CommandGroup {
     public Mat img;
-    public int errorx,errory;
+    public int errorx, errory;
+
+    public double getDistMeter() {
+        return 5.0 * Robot.m_ultrasonic.getVoltage() / Robot.mvPer5mm / 1000;
+    }
+
     public int[] findCenter() {
         // [x,y]
         int[] centerCoor = { -1, -1 };
@@ -37,37 +42,31 @@ public class AlignShooter extends CommandGroup{
         }
         return centerCoor;
     }
+
     public AlignShooter(Mat img) {
         this.img = img;
     }
-    
+
     protected void initialize() {
 
     }
-    
-    protected void execute() {        
+
+    protected void execute() {
         int[] center = findCenter();
         errorx = center[0] - Robot.imgWidth;
         errory = center[1] - Robot.imgHeight;
-        if(Math.abs(errorx)>2)
-        {
+        if (Math.abs(errorx) > 2) {
             addSequential(new TurnHorizontal(errorx));
-        }
-        else if(Math.abs(errorx)>2)
-        {
-           // addSequential(new TurnVertical(errory));
-        }
-        else
-        {
-            new StopTurning().start();
         }
     }
 
     protected boolean isFinished() {
-        return (Math.abs(errorx) < 2 && Math.abs(errory) < 2);
+        return (Math.abs(errorx) < 2);
     }
-    
+
     protected void end() {
+        addSequential(new StopTurning());
+        addSequential(new Shoot(getDistMeter(), Robot.heightOuterPort));
     }
 
     protected void interrupted() {

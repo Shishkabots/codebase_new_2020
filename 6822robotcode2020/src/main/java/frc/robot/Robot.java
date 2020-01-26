@@ -68,6 +68,8 @@ public class Robot extends TimedRobot {
   public static WPI_TalonSRX shoot1;
   public static WPI_VictorSPX shoot2;
 
+  public static WPI_VictorSPX turret;
+
   public static WPI_TalonFX drive1;
   public static WPI_TalonFX drive2;
   public static WPI_TalonFX slave1;
@@ -81,6 +83,7 @@ public class Robot extends TimedRobot {
   public static Climber m_climber;
   public static Shooter m_shooter;
   public static StorageFeed m_storage;
+  public static Turret m_turret;
 
   public static OI m_oi;
   public static Thread m_visionThread;
@@ -90,22 +93,21 @@ public class Robot extends TimedRobot {
   public static final int imgWidth = 640;
   public static final int imgHeight = 480;
 
-  private static final int kUltrasonicPort = 0;
-  private static final double kValueToInches = 1;
-  private static final int minValue = 238;
-  private static final double mvPer5mm = 0.004883;
+  public static final int kUltrasonicPort = 0;
+  public static final double kValueToInches = 1;
+  public static final int minValue = 238;
+  public static final double mvPer5mm = 0.004883;
   public static double theta = 0;
   public static Spark led;
 
-  private final AnalogInput m_ultrasonic = new AnalogInput(kUltrasonicPort);
+  public static final AnalogInput m_ultrasonic = new AnalogInput(kUltrasonicPort);
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
+  public static final double heightOuterPort = 2.4892; //units in meters
   private int cont;
-  
   public int[] findCenter(Mat img) {
     // [x,y]
     int[] centerCoor = { -1, -1 };
@@ -166,10 +168,17 @@ public class Robot extends TimedRobot {
     shoot1 = new WPI_TalonSRX(7);
     shoot2 = new WPI_VictorSPX(8);
 
+    shoot1.configPeakCurrentLimit(60);
+    shoot1.configContinuousCurrentLimit(28);
+
     drive1 = new WPI_TalonFX(9);
     drive2 = new WPI_TalonFX(10);
     slave1 = new WPI_TalonFX(11);
     slave2 = new WPI_TalonFX(12);
+
+    turret = new WPI_VictorSPX(13);
+
+    m_turret = new Turret(turret);
 
     m_drive = new DifferentialDrive(drive1, drive2);
     SmartDashboard.putData(m_drive);
