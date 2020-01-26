@@ -108,20 +108,32 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public static final double heightOuterPort = 2.4892; //units in meters
   private int cont;
-  public int[] findCenter(Mat img) {
+  
+  
+  public int[] findCenter(MatOfPoint contour) {
     // [x,y]
     int[] centerCoor = { -1, -1 };
-    ArrayList<MatOfPoint> contours = Robot.pipeline.filterContoursOutput();
-    System.out.println(contours.size() + " contours");
-    if (Robot.pipeline.filterContoursOutput().size() == 1) {
-      Rect boundingRect = Imgproc.boundingRect(contours.get(0));
-      centerCoor[0] = (int) (boundingRect.x + (boundingRect.width / 2.0));
-      centerCoor[1] = (int) (boundingRect.y+ (boundingRect.height/2));
-      return centerCoor;
-    }
+    Rect boundingRect = Imgproc.boundingRect(contour);
+    centerCoor[0] = (int) (boundingRect.x + (boundingRect.width / 2.0));
+    centerCoor[1] = (int) (boundingRect.y+ (boundingRect.height/2));
     return centerCoor;
   }
 
+  public MatOfPoint getLargestContour(ArrayList<MatOfPoint> contours)
+  {
+    int index = 0 ;
+    int largestArea = 0;
+    for(int i=0;i<contours.size();i++)
+    {
+      Rect boundingRect = Imgproc.boundingRect(contours.get(i));
+      if(boundingRect.width * boundingRect.height > largestArea)
+      {
+        index = i;
+        largestArea = boundingRect.width * boundingRect.height;
+      }
+    }
+    return contours.get(index);
+  }
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
@@ -146,11 +158,13 @@ public class Robot extends TimedRobot {
         //m_oi.autoAlignButton.whenPressed(new AlignShooter(img));
         //new AlignShooter(img);
         Robot.pipeline.process(img);
-        int[] center = findCenter(img);
-        //System.out.println(center[0]);
-        //System.out.println(center[1]);
+        ArrayList<MatOfPoint> contours = Robot.pipeline.filterContoursOutput();
+        if(contours.size()>0)
+        {
+          int center[] = findCenter(getLargestContour(contours));
+          Imgproc.circle(img, new Point(center[0],center[1]),50,new Scalar(255,255,0));
+        }
         Imgproc.circle(img, new Point(imgWidth/2,imgHeight/2),50,new Scalar(255,255,0));
-        Imgproc.circle(img, new Point(center[0],center[1]),50,new Scalar(255,255,0));
         outputStream.putFrame(img);
       }
     });
