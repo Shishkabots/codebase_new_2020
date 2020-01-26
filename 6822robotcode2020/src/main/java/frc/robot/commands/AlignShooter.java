@@ -57,17 +57,16 @@ public class AlignShooter extends CommandGroup {
         errory = center[1] - Robot.imgHeight;
         if (Math.abs(errorx) > 2) {
             addSequential(new TurnHorizontal(errorx));
-        } else {
-            addSequential(new StopTurning());
-            addSequential(new Shoot(getDistMeter(),Robot.heightOuterPort));
         }
     }
 
     protected boolean isFinished() {
-        return (Math.abs(errorx) < 2 && Math.abs(errory) < 2);
+        return (Math.abs(errorx) < 2);
     }
 
     protected void end() {
+        addSequential(new StopTurning());
+        addSequential(new Shoot(getDistMeter(), Robot.heightOuterPort));
     }
 
     protected void interrupted() {
