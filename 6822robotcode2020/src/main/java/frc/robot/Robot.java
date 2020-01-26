@@ -168,6 +168,9 @@ public class Robot extends TimedRobot {
     shoot1 = new WPI_TalonSRX(7);
     shoot2 = new WPI_VictorSPX(8);
 
+    shoot1.configPeakCurrentLimit(60);
+    shoot1.configContinuousCurrentLimit(28);
+
     drive1 = new WPI_TalonFX(9);
     drive2 = new WPI_TalonFX(10);
     slave1 = new WPI_TalonFX(11);
