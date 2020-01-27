@@ -93,14 +93,16 @@ public class Robot extends TimedRobot {
   public static final int imgWidth = 640;
   public static final int imgHeight = 480;
 
-  public static final int kUltrasonicPort = 0;
+  public static final int kUltrasonicPort0 = 0;
+  public static final int kUltrasonicPort1 = 1;
   public static final double kValueToInches = 1;
   public static final int minValue = 238;
   public static final double mvPer5mm = 0.004883;
   public static double theta = 0;
   public static Spark led;
 
-  public static final AnalogInput m_ultrasonic = new AnalogInput(kUltrasonicPort);
+  public static final AnalogInput m_ultrasonic0 = new AnalogInput(kUltrasonicPort0);
+  public static final AnalogInput m_ultrasonic1 = new AnalogInput(kUltrasonicPort1);
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -202,7 +204,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    double currentDistanceAuto = m_ultrasonic.getValue() * kValueToInches;
+    double currentDistanceAuto = ((m_ultrasonic0.getValue() + m_ultrasonic1.getValue()) / 2.0) * kValueToInches;
     SmartDashboard.putNumber("auto reading", currentDistanceAuto);
     System.out.println("auto reading" + currentDistanceAuto);
     switch (m_autoSelected) {
@@ -221,7 +223,7 @@ public class Robot extends TimedRobot {
     cont += 5;
     //double currentDistanceTeleop = (m_ultrasonic.getAverageVoltage()-minVoltage) *  kValueToInches;
     if(cont%200 == 0) {
-      double currentDistanceTeleop = 5.0*m_ultrasonic.getVoltage()/mvPer5mm;
+      double currentDistanceTeleop = 5.0 * (((m_ultrasonic0.getVoltage() + m_ultrasonic1.getVoltage()) / 2) / mvPer5mm);
       SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
       System.out.println("readings: " + currentDistanceTeleop);
     }
