@@ -97,7 +97,7 @@ public class Robot extends TimedRobot {
   public static final int kUltrasonicPort1 = 1;
   public static final double kValueToInches = 1;
   public static final int minValue = 238;
-  public static final double mvPer5mm = 0.004883;
+  public static final double mvPer5mm = 0.004885;
   public static double theta = 0;
   public static Spark led;
 
@@ -117,7 +117,7 @@ public class Robot extends TimedRobot {
     int[] centerCoor = { -1, -1 };
     Rect boundingRect = Imgproc.boundingRect(contour);
     centerCoor[0] = (int) (boundingRect.x + (boundingRect.width / 2.0));
-    centerCoor[1] = (int) (boundingRect.y+ (boundingRect.height/2));
+    centerCoor[1] = (int) (boundingRect.y + (boundingRect.height/2));
     return centerCoor;
   }
 
@@ -141,7 +141,8 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-
+    SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0*m_ultrasonic0.getVoltage()/mvPer5mm);
+    SmartDashboard.putNumber("Ultrasonic Sensor 1", 5.0*m_ultrasonic1.getVoltage()/mvPer5mm);
     pipeline = new GripPipeline();
 
     m_oi = new OI();
@@ -164,9 +165,9 @@ public class Robot extends TimedRobot {
         if(contours.size()>0)
         {
           int center[] = findCenter(getLargestContour(contours));
-          Imgproc.circle(img, new Point(center[0],center[1]),50,new Scalar(255,255,0));
+          Imgproc.circle(img, new Point(center[0],center[1]),10,new Scalar(255,255,0),10);
         }
-        Imgproc.circle(img, new Point(imgWidth/2,imgHeight/2),50,new Scalar(255,255,0));
+        Imgproc.circle(img, new Point(imgWidth/2,imgHeight/2),10,new Scalar(255,255,0),10);
         outputStream.putFrame(img);
       }
     });
@@ -214,13 +215,16 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getAverageVoltage() / mvPer5mm);
+    SmartDashboard.putNumber("Ultrasonic Sensor 1", 5.0 * m_ultrasonic1.getAverageVoltage() / mvPer5mm);
   }
 
   @Override
   public void autonomousPeriodic() {
     double currentDistanceAuto = ((m_ultrasonic0.getValue() + m_ultrasonic1.getValue()) / 2.0) * kValueToInches;
     SmartDashboard.putNumber("auto reading", currentDistanceAuto);
-    System.out.println("auto reading" + currentDistanceAuto);
+    //System.out.println("auto reading" + currentDistanceAuto);
+
     switch (m_autoSelected) {
     case kCustomAuto:
       // Put custom auto code here
@@ -237,9 +241,11 @@ public class Robot extends TimedRobot {
     cont += 5;
     //double currentDistanceTeleop = (m_ultrasonic.getAverageVoltage()-minVoltage) *  kValueToInches;
     if(cont%200 == 0) {
+      SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getAverageVoltage() / mvPer5mm);
+      SmartDashboard.putNumber("Ultrasonic Sensor 1", 5.0 * m_ultrasonic1.getAverageVoltage() / mvPer5mm);
       double currentDistanceTeleop = 5.0 * (((m_ultrasonic0.getVoltage() + m_ultrasonic1.getVoltage()) / 2) / mvPer5mm);
       SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
-      System.out.println("readings: " + currentDistanceTeleop);
+      //System.out.println("readings: " + currentDistanceTeleop);
     }
   }
 
