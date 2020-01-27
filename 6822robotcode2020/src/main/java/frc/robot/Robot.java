@@ -140,7 +140,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    m_ultrasonic0.setGlobalSampleRate(10000);
+    AnalogInput.setGlobalSampleRate(10000.0);
     SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0*m_ultrasonic0.getVoltage()/mvPer5mm);
     pipeline = new GripPipeline();
 
@@ -200,9 +200,6 @@ public class Robot extends TimedRobot {
     m_drive = new DifferentialDrive(drive1, drive2);
     SmartDashboard.putData(m_drive);
     m_drivetrain = new DriveTrain(m_drive);
-
-    
-
   }
 
   @Override
@@ -240,7 +237,7 @@ public class Robot extends TimedRobot {
     //double currentDistanceTeleop = (m_ultrasonic.getAverageVoltage()-minVoltage) *  kValueToInches;
     if(cont%200 == 0) {
       SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getAverageVoltage() / mvPer5mm);
-      double currentDistanceTeleop = 5.0 * (((m_ultrasonic0.getAverageVoltage() / mvPer5mm);
+      double currentDistanceTeleop = 5.0 * m_ultrasonic0.getAverageVoltage() / mvPer5mm;
       SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
       //System.out.println("readings: " + currentDistanceTeleop);
     }
