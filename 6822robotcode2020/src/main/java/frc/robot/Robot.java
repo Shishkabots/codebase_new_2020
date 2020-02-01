@@ -115,6 +115,11 @@ public class Robot extends TimedRobot {
   private int cont;
   private double tempsum = 0;
   private double[] voltReading = new double[25];
+
+  public final double FOVAngleWidth = 60.5; //degrees
+  public final double Tcm = 99.695;//width of vision target in cm
+  public final int FOVpixel = Robot.imgWidth;
+
   public int[] findCenter(MatOfPoint contour) {
     // [x,y]
     int[] centerCoor = { -1, -1 };
@@ -139,16 +144,18 @@ public class Robot extends TimedRobot {
     }
     return contours.get(index);
   }
+
+  public double visionDistance(MatOfPoint contour)
+  {
+    int TPixels = Imgproc.boundingRect(contour).width;
+    return (Tcm*FOVpixel)/(2*TPixels*Math.tan(FOVAngleWidth));
+  }
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-<<<<<<< HEAD
     AnalogInput.setGlobalSampleRate(1000000.0);
-=======
-    AnalogInput.setGlobalSampleRate(100000.0);
->>>>>>> c9d672ed99c9697020c48df3759319e123e258d1
     SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0*m_ultrasonic0.getVoltage()/mvPer5mm);
     pipeline = new GripPipeline();
 
@@ -171,7 +178,9 @@ public class Robot extends TimedRobot {
         ArrayList<MatOfPoint> contours = Robot.pipeline.filterContoursOutput();
         if(contours.size()>0)
         {
-          int center[] = findCenter(getLargestContour(contours));
+          MatOfPoint contour = getLargestContour(contours);
+          System.out.println("Vision Distance: "+visionDistance(contour));
+          int center[] = findCenter(contour);
           Imgproc.circle(img, new Point(center[0],center[1]),10,new Scalar(255,255,0),10);
         }
         Imgproc.circle(img, new Point(imgWidth/2,imgHeight/2),10,new Scalar(255,255,0),10);
