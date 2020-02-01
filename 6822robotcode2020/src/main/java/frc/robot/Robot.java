@@ -120,6 +120,7 @@ public class Robot extends TimedRobot {
   public final double Tcm = 104;//width of vision target in cm
   public final int FOVpixel = Robot.imgWidth;
 
+
   public int[] findCenter(MatOfPoint contour) {
     // [x,y]
     int[] centerCoor = { -1, -1 };
@@ -182,6 +183,11 @@ public class Robot extends TimedRobot {
           System.out.println("Vision Distance: "+visionDistance(contour));
           int center[] = findCenter(contour);
           Imgproc.circle(img, new Point(center[0],center[1]),10,new Scalar(255,255,0),10);
+          Rect boundingRect = Imgproc.boundingRect(contour);
+          Imgproc.line(img,new Point(boundingRect.x,boundingRect.y),new Point(boundingRect.x+boundingRect.height,boundingRect.y),new Scalar(255,0,0));
+          Imgproc.line(img,new Point(boundingRect.x,boundingRect.y),new Point(boundingRect.x,boundingRect.y+boundingRect.width),new Scalar(255,0,0));
+          Imgproc.line(img,new Point(boundingRect.x+boundingRect.height,boundingRect.y),new Point(boundingRect.x+boundingRect.height,boundingRect.y+boundingRect.width),new Scalar(255,0,0));
+          Imgproc.line(img,new Point(boundingRect.x,boundingRect.y+boundingRect.width),new Point(boundingRect.x+boundingRect.height,boundingRect.y+boundingRect.width),new Scalar(255,0,0));
         }
         Imgproc.circle(img, new Point(imgWidth/2,imgHeight/2),10,new Scalar(255,255,0),10);
         outputStream.putFrame(img);
@@ -254,7 +260,7 @@ public class Robot extends TimedRobot {
     if (cont % 25 == 0) { // uses the 25th reading
     double currVolt = m_ultrasonic0.getVoltage();
     tempsum += currVolt;
-    voltReading[cont%25] = currVolt;
+    voltReading[(cont/25)%25] = currVolt;
     //System.out.println(tempsum+" "+cont);
     //double currentDistanceTeleop = (m_ultrasonic.getAverageVoltage()-minVoltage) *  kValueToInches;
     //if(cont%25 == 0) {
