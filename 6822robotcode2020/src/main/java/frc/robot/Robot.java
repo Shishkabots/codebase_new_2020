@@ -144,7 +144,11 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+<<<<<<< HEAD
     AnalogInput.setGlobalSampleRate(1000000.0);
+=======
+    AnalogInput.setGlobalSampleRate(100000.0);
+>>>>>>> c9d672ed99c9697020c48df3759319e123e258d1
     SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0*m_ultrasonic0.getVoltage()/mvPer5mm);
     pipeline = new GripPipeline();
 
