@@ -116,15 +116,9 @@ public class Robot extends TimedRobot {
   private double tempsum = 0;
   private double[] voltReading = new double[25];
 
-<<<<<<< HEAD
-  public final double FOVAngleWidth = Math.toRadians(60.5)/2; //degrees
+  public final double FOVAngleWidth = Math.toRadians(49.0); //degrees
   public final double Tcm = 104;//width of vision target in cm
   public final int FOVpixel = Robot.imgWidth;
-=======
-  public final double FOVAngleWidth = 60.5/2; //degrees
-  public final double Tcm = 99.695;//width of vision target in cm
-  public final int FOVpixel = 640; // width of camera FOV 
->>>>>>> b73a608687fc989782bc8be41918ce5c574d2ccf
 
   public int[] findCenter(MatOfPoint contour) {
     // [x,y]
