@@ -28,7 +28,7 @@ import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.*;
 import org.opencv.core.*;
-
+import java. util. Arrays;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -36,8 +36,12 @@ import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
+
+import java.lang.reflect.Array;
 //import frc.robot.GripPipeline;
 import java.util.ArrayList;
+import java.util.Collections;
+
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import edu.wpi.first.vision.VisionRunner;
@@ -109,8 +113,8 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public static final double heightOuterPort = 2.4892; //units in meters
   private int cont;
-  
-  
+  private double tempsum = 0;
+  private double[] voltReading = new double[25];
   public int[] findCenter(MatOfPoint contour) {
     // [x,y]
     int[] centerCoor = { -1, -1 };
@@ -140,7 +144,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    AnalogInput.setGlobalSampleRate(10000.0);
+    AnalogInput.setGlobalSampleRate(1000000.0);
     SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0*m_ultrasonic0.getVoltage()/mvPer5mm);
     pipeline = new GripPipeline();
 
@@ -233,12 +237,23 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    cont += 5;
+    cont++;
+    double currVolt = m_ultrasonic0.getVoltage();
+    tempsum += currVolt;
+    voltReading[cont%25] = currVolt;
+    System.out.println(tempsum+" "+cont);
     //double currentDistanceTeleop = (m_ultrasonic.getAverageVoltage()-minVoltage) *  kValueToInches;
-    if(cont%200 == 0) {
-      SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getAverageVoltage() / mvPer5mm);
-      double currentDistanceTeleop = 5.0 * m_ultrasonic0.getAverageVoltage() / mvPer5mm;
+    if(cont%25 == 0) {
+      Arrays.sort(voltReading);
+      tempsum-=voltReading[0];
+      tempsum-=voltReading[1];
+      tempsum-=voltReading[23];
+      tempsum-=voltReading[24];
+      SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * tempsum/21 / mvPer5mm);
+      double currentDistanceTeleop = 5.0 * tempsum/20 / mvPer5mm;
       SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
+      tempsum = 0;
+      voltReading = new double[25];
       //System.out.println("readings: " + currentDistanceTeleop);
     }
   }
