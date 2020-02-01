@@ -117,9 +117,12 @@ public class Robot extends TimedRobot {
   private double[] voltReading = new double[25];
 
   public final double FOVAngleWidth = Math.toRadians(58.5)/2; //degrees
-  public final double Tcm = 104;//width of vision target in cm
-  public final int FOVpixel = Robot.imgWidth;
+  public final double TcmWidth = 104;//width of vision target in cm
+  public final int FOVpixelWidth = Robot.imgWidth;
 
+  public final double FOVAngleHeight = Math.toRadians(45.6)/2;
+  public final double TcmHeight = 43.18; // heigh of vision target in cm
+  public final int FOVpixelHeight = Robot.imgHeight;
 
   public int[] findCenter(MatOfPoint contour) {
     // [x,y]
@@ -148,9 +151,10 @@ public class Robot extends TimedRobot {
 
   public double visionDistance(MatOfPoint contour)
   {
-    int TPixels = Imgproc.boundingRect(contour).width;
-    System.out.println("BB width: " + TPixels);
-    double dist = (Tcm*FOVpixel)/(2*TPixels*Math.tan(FOVAngleWidth));
+    int TPixelsWidth = Imgproc.boundingRect(contour).width;
+    int TPixelsHeight = Imgproc.boundingRect(contour).height;
+    //System.out.println("BB width: " + TPixels);
+    double dist = (TcmWidth*TcmHeight*FOVpixelWidth*FOVpixelHeight)/(2*TPixelsWidth*TPixelsHeight*Math.tan(FOVAngleHeight)*Math.tan(FOVAngleWidth));
     return (1.03 * dist) - 0.926;
   }
   @Override
