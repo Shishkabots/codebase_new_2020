@@ -116,15 +116,9 @@ public class Robot extends TimedRobot {
   private double tempsum = 0;
   private double[] voltReading = new double[25];
 
-<<<<<<< HEAD
-  public final double FOVAngleWidth = Math.toRadians(60.5)/2; //degrees
-  public final double Tcm = 104;//width of vision target in cm
-  public final int FOVpixel = Robot.imgWidth;
-=======
   public final double FOVAngleWidth = 60.5/2; //degrees
   public final double Tcm = 99.695;//width of vision target in cm
   public final int FOVpixel = 640; // width of camera FOV 
->>>>>>> b73a608687fc989782bc8be41918ce5c574d2ccf
 
   public int[] findCenter(MatOfPoint contour) {
     // [x,y]
@@ -260,7 +254,7 @@ public class Robot extends TimedRobot {
     if (cont % 25 == 0) { // uses the 25th reading
     double currVolt = m_ultrasonic0.getVoltage();
     tempsum += currVolt;
-    voltReading[cont%25] = currVolt;
+    voltReading[(cont/25)%25] = currVolt;
     //System.out.println(tempsum+" "+cont);
     //double currentDistanceTeleop = (m_ultrasonic.getAverageVoltage()-minVoltage) *  kValueToInches;
     //if(cont%25 == 0) {
