@@ -116,7 +116,7 @@ public class Robot extends TimedRobot {
   private double tempsum = 0;
   private double[] voltReading = new double[25];
 
-  public final double FOVAngleWidth = Math.toRadians(60.5)/2; //degrees
+  public final double FOVAngleWidth = Math.toRadians(58.5)/2; //degrees
   public final double Tcm = 104;//width of vision target in cm
   public final int FOVpixel = Robot.imgWidth;
 
