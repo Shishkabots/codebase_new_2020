@@ -116,8 +116,13 @@ public class Robot extends TimedRobot {
   private double tempsum = 0;
   private double[] voltReading = new double[25];
 
+<<<<<<< HEAD
   public final double FOVAngleWidth = 60.5/2; //degrees
   public final double Tcm = 99.695;//width of vision target in cm
+=======
+  public final double FOVAngleWidth = Math.toRadians(60.5)/2; //degrees
+  public final double Tcm = 104;//width of vision target in cm
+>>>>>>> 774fbdb9d8df3c7d98bc55c2c6cfe979927b47c4
   public final int FOVpixel = 640; // width of camera FOV 
 
   public int[] findCenter(MatOfPoint contour) {
@@ -182,6 +187,11 @@ public class Robot extends TimedRobot {
           System.out.println("Vision Distance: "+visionDistance(contour));
           int center[] = findCenter(contour);
           Imgproc.circle(img, new Point(center[0],center[1]),10,new Scalar(255,255,0),10);
+          Rect boundingRect = Imgproc.boundingRect(contour);
+          Imgproc.line(img,new Point(boundingRect.x,boundingRect.y),new Point(boundingRect.x+boundingRect.height,boundingRect.y),new Scalar(255,0,0));
+          Imgproc.line(img,new Point(boundingRect.x,boundingRect.y),new Point(boundingRect.x,boundingRect.y+boundingRect.width),new Scalar(255,0,0));
+          Imgproc.line(img,new Point(boundingRect.x+boundingRect.height,boundingRect.y),new Point(boundingRect.x+boundingRect.height,boundingRect.y+boundingRect.width),new Scalar(255,0,0));
+          Imgproc.line(img,new Point(boundingRect.x,boundingRect.y+boundingRect.width),new Point(boundingRect.x+boundingRect.height,boundingRect.y+boundingRect.width),new Scalar(255,0,0));
         }
         Imgproc.circle(img, new Point(imgWidth/2,imgHeight/2),10,new Scalar(255,255,0),10);
         outputStream.putFrame(img);
