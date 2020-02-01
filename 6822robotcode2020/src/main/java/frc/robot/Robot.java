@@ -148,7 +148,7 @@ public class Robot extends TimedRobot {
   public double visionDistance(MatOfPoint contour)
   {
     int TPixels = Imgproc.boundingRect(contour).width;
-    return (Tcm*FOVpixel)/(2*TPixels*Math.tan(FOVAngleWidth));
+    return (Tcm*FOVpixel)/(TPixels*Math.tan(FOVAngleWidth));
   }
   @Override
   public void robotInit() {
