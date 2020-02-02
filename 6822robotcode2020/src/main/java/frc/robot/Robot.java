@@ -149,15 +149,25 @@ public class Robot extends TimedRobot {
     return contours.get(index);
   }
 
-  public double visionDistance(MatOfPoint contour)
+  public double visionDistanceWidth(MatOfPoint contour)
   {
     int TPixelsWidth = Imgproc.boundingRect(contour).width;
-    int TPixelsHeight = Imgproc.boundingRect(contour).height;
-    //System.out.println("BB width: " + TPixels);
+    //System.out.println("BB width: " + TPixelsWidth);
     double distX = (TcmWidth*FOVpixelWidth)/(2*TPixelsWidth*Math.tan(FOVAngleWidth));
+    return (1.20 * distX) + 5;
+  }
+
+  public double visionDistanceHeight(MatOfPoint contour) 
+  {
+    int TPixelsHeight = Imgproc.boundingRect(contour).height;
+    //System.out.println("BB width: " + TPixelsHeight);
     double distY = (TcmHeight*FOVpixelHeight)/(2*TPixelsHeight*Math.tan(FOVAngleHeight));
-    double distNet = (distX + distY) / 2.0;
-    return (1.03 * distNet) - 0.926;
+    return (1.375*distY) + 5;
+  }
+
+  public double averageVisionDistance(MatOfPoint contour)
+  {
+    return (2*visionDistanceHeight(contour)+visionDistanceWidth(contour))/3.0;
   }
   @Override
   public void robotInit() {
@@ -188,7 +198,8 @@ public class Robot extends TimedRobot {
         if(contours.size()>0)
         {
           MatOfPoint contour = getLargestContour(contours);
-          System.out.println("Vision Distance: "+ visionDistance(contour));
+          System.out.println("Vision Distances: "+ visionDistanceWidth(contour)+" "+ visionDistanceHeight(contour)+" "+averageVisionDistance(contour));
+          //System.out.println(averageVisionDistance(contour));
           int center[] = findCenter(contour);
           Imgproc.circle(img, new Point(center[0],center[1]),10,new Scalar(255,255,0),10);
           Rect boundingRect = Imgproc.boundingRect(contour);
