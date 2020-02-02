@@ -154,7 +154,7 @@ public class Robot extends TimedRobot {
     int TPixelsWidth = Imgproc.boundingRect(contour).width;
     int TPixelsHeight = Imgproc.boundingRect(contour).height;
     //System.out.println("BB width: " + TPixels);
-    double dist = Math.sqrt((TcmWidth*TcmHeight*FOVpixelWidth*FOVpixelHeight)/(2*TPixelsWidth*TPixelsHeight*Math.tan(FOVAngleHeight)*Math.tan(FOVAngleWidth)));
+    double dist = Math.sqrt((TcmWidth*TcmHeight*FOVpixelWidth*FOVpixelHeight)/(2*2*TPixelsWidth*TPixelsHeight*Math.tan(FOVAngleHeight)*Math.tan(FOVAngleWidth)));
     return (1.03 * dist) - 0.926;
   }
   @Override
