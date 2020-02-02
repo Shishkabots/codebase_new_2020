@@ -124,6 +124,8 @@ public class Robot extends TimedRobot {
   public final double TcmHeight = 43.18; // heigh of vision target in cm
   public final int FOVpixelHeight = Robot.imgHeight;
 
+  public final double Tratio = TcmHeight/TcmWidth;
+
   public int[] findCenter(MatOfPoint contour) {
     // [x,y]
     int[] centerCoor = { -1, -1 };
@@ -151,8 +153,11 @@ public class Robot extends TimedRobot {
 
   public double visionDistanceWidth(MatOfPoint contour)
   {
-    int TPixelsWidth = Imgproc.boundingRect(contour).width;
+    double TPixelsWidth = Imgproc.boundingRect(contour).width;
+    double TPixelsHeight = Imgproc.boundingRect(contour).height;
+    double TPixelRatio = 1.0*TPixelsWidth/TPixelsHeight;
     //System.out.println("BB width: " + TPixelsWidth);
+    TPixelsWidth = TPixelsWidth*TPixelRatio/Tratio;
     double distX = (TcmWidth*FOVpixelWidth)/(2*TPixelsWidth*Math.tan(FOVAngleWidth));
     return (1.20 * distX) + 5;
   }
