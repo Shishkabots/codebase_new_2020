@@ -149,7 +149,9 @@ public class Robot extends TimedRobot {
   public double visionDistance(MatOfPoint contour)
   {
     int TPixels = Imgproc.boundingRect(contour).width;
-    return (1.2) * ((Tcm*FOVpixel)/(2*TPixels*Math.tan(FOVAngleWidth)));
+    System.out.println("BB width: " + TPixels);
+    double dist = (Tcm*FOVpixel)/(2*TPixels*Math.tan(FOVAngleWidth));
+    return (1.03 * dist) - 0.926;
   }
   @Override
   public void robotInit() {
@@ -180,7 +182,7 @@ public class Robot extends TimedRobot {
         if(contours.size()>0)
         {
           MatOfPoint contour = getLargestContour(contours);
-          System.out.println("Vision Distance: "+visionDistance(contour));
+          System.out.println("Vision Distance: "+ visionDistance(contour));
           int center[] = findCenter(contour);
           Imgproc.circle(img, new Point(center[0],center[1]),10,new Scalar(255,255,0),10);
           Rect boundingRect = Imgproc.boundingRect(contour);
@@ -256,21 +258,22 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     cont++;
-    if (cont % 25 == 0) { // uses the 25th reading
+    if (cont % 1 == 0) { // uses the 25th reading
     double currVolt = m_ultrasonic0.getVoltage();
+    double currentDistanceTeleop = 0;
     tempsum += currVolt;
-    voltReading[(cont/25)%25] = currVolt;
+    voltReading[(cont)%25] = currVolt;
     //System.out.println(tempsum+" "+cont);
     //double currentDistanceTeleop = (m_ultrasonic.getAverageVoltage()-minVoltage) *  kValueToInches;
     //if(cont%25 == 0) {
-      if(cont%(25*25) == 0) {
+      if(cont%(25) == 0) {
         Arrays.sort(voltReading);
         tempsum-=voltReading[0];
         tempsum-=voltReading[1];
         tempsum-=voltReading[23];
         tempsum-=voltReading[24];
-        SmartDashboard.putNumber("Ultrasonic Sensor 0 distance in cm", ((5.0 * tempsum/21 / mvPer5mm) / 10));
-        double currentDistanceTeleop = 5.0 * tempsum/20 / mvPer5mm;
+        //System.out.println("Ultrasonic Sensor 0 distance in cm "+ ((5.0 * tempsum/21 / mvPer5mm) / 10));
+        currentDistanceTeleop = 5.0 * tempsum/20 / mvPer5mm;
         SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
         tempsum = 0;
         voltReading = new double[25];
