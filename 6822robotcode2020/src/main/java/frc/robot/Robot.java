@@ -198,7 +198,7 @@ public class Robot extends TimedRobot {
         if(contours.size()>0)
         {
           MatOfPoint contour = getLargestContour(contours);
-          System.out.println("Vision Distances: "+ visionDistanceWidth(contour)+" "+ visionDistanceHeight(contour)+" "+averageVisionDistance(contour));
+          //System.out.println("Vision Distances: "+ visionDistanceWidth(contour)+" "+ visionDistanceHeight(contour)+" "+averageVisionDistance(contour));
           //System.out.println(averageVisionDistance(contour));
           int center[] = findCenter(contour);
           Imgproc.circle(img, new Point(center[0],center[1]),10,new Scalar(255,255,0),10);
@@ -289,7 +289,7 @@ public class Robot extends TimedRobot {
         tempsum-=voltReading[1];
         tempsum-=voltReading[23];
         tempsum-=voltReading[24];
-        //System.out.println("Ultrasonic Sensor 0 distance in cm "+ ((5.0 * tempsum/21 / mvPer5mm) / 10));
+        System.out.println("Ultrasonic Sensor 0 distance in cm "+ ((5.0 * tempsum/21 / mvPer5mm) / 10));
         currentDistanceTeleop = 5.0 * tempsum/20 / mvPer5mm;
         SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
         tempsum = 0;
