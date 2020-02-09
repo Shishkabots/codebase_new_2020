@@ -104,6 +104,7 @@ public class Robot extends TimedRobot {
   public static final double mvPer5mm = 0.004885;
   public static double theta = 0;
   public static Spark led;
+  public static Mat img;
 
   public static final AnalogInput m_ultrasonic0 = new AnalogInput(kUltrasonicPort0);
   
@@ -190,7 +191,7 @@ public class Robot extends TimedRobot {
       camera.setResolution(640, 480);
       cvSink = CameraServer.getInstance().getVideo();
       CvSource outputStream = CameraServer.getInstance().putVideo("Rectangle", 640, 480);
-      Mat img = new Mat();
+      img = new Mat();
       while (!Thread.interrupted()) {
         if (cvSink.grabFrame(img) == 0) {
           outputStream.notifyError(cvSink.getError());
