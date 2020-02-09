@@ -117,12 +117,14 @@ public class Robot extends TimedRobot {
   private double[] voltReading = new double[25];
 
   public final double FOVAngleWidth = Math.toRadians(58.5)/2; //degrees
-  public final double TcmWidth = 104;//width of vision target in cm
+  public final double TcmWidth = 104.0;//width of vision target in cm
   public final int FOVpixelWidth = Robot.imgWidth;
 
   public final double FOVAngleHeight = Math.toRadians(45.6)/2;
-  public final double TcmHeight = 43.18; // heigh of vision target in cm
+  public final double TcmHeight = 45.0; // heigh of vision target in cm
   public final int FOVpixelHeight = Robot.imgHeight;
+
+  public final double Tratio = 0.475;//TcmHeight/TcmWidth;
 
   public int[] findCenter(MatOfPoint contour) {
     // [x,y]
@@ -151,23 +153,26 @@ public class Robot extends TimedRobot {
 
   public double visionDistanceWidth(MatOfPoint contour)
   {
-    int TPixelsWidth = Imgproc.boundingRect(contour).width;
-    //System.out.println("BB width: " + TPixelsWidth);
+    double TPixelsWidth = Imgproc.boundingRect(contour).width;
+    double TPixelsHeight = Imgproc.boundingRect(contour).height;
+    double TPixelRatio = 1.0*TPixelsHeight/TPixelsWidth;
+    //System.out.println("/n"+TPixelRatio+" "+Tratio);
+    double factor = 0.375*(TPixelRatio/Tratio - 1)+1;
+    TPixelsWidth = TPixelsWidth*factor;
     double distX = (TcmWidth*FOVpixelWidth)/(2*TPixelsWidth*Math.tan(FOVAngleWidth));
     return (1.20 * distX) + 5;
   }
 
   public double visionDistanceHeight(MatOfPoint contour) 
   {
-    int TPixelsHeight = Imgproc.boundingRect(contour).height;
-    //System.out.println("BB width: " + TPixelsHeight);
+    double TPixelsHeight = Imgproc.boundingRect(contour).height;
     double distY = (TcmHeight*FOVpixelHeight)/(2*TPixelsHeight*Math.tan(FOVAngleHeight));
     return (1.375*distY) + 5;
   }
 
   public double averageVisionDistance(MatOfPoint contour)
   {
-    return (2*visionDistanceHeight(contour)+visionDistanceWidth(contour))/3.0;
+    return (visionDistanceHeight(contour)+visionDistanceWidth(contour))/2.0;
   }
   @Override
   public void robotInit() {
