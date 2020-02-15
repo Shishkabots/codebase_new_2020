@@ -41,6 +41,7 @@ import java.lang.reflect.Array;
 //import frc.robot.GripPipeline;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.io.*;
 
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
@@ -175,12 +176,19 @@ public class Robot extends TimedRobot {
   {
     return (visionDistanceHeight(contour)+visionDistanceWidth(contour))/2.0;
   }
+
+  public static void bufferedReader() throws IOException {
+    String testStr = " does this work";
+    BufferedWriter writer = new BufferedWriter(new FileWriter("/home/lvuser.txt"));
+    writer.write(testStr);
+    writer.close();
+  }
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    AnalogInput.setGlobalSampleRate(1000000.0);
+    AnalogInput.setGlobalSampleRate(100000.0);
     SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0*m_ultrasonic0.getVoltage()/mvPer5mm);
     pipeline = new GripPipeline();
 
@@ -205,7 +213,7 @@ public class Robot extends TimedRobot {
         {
           MatOfPoint contour = getLargestContour(contours);
           //System.out.println("Vision Distances: "+ visionDistanceWidth(contour)+" "+ visionDistanceHeight(contour)+" "+averageVisionDistance(contour));
-          //System.out.println(averageVisionDistance(contour));
+          System.out.println(averageVisionDistance(contour));
           int center[] = findCenter(contour);
           Imgproc.circle(img, new Point(center[0],center[1]),10,new Scalar(255,255,0),10);
           Rect boundingRect = Imgproc.boundingRect(contour);
@@ -258,7 +266,7 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
-    SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getAverageVoltage() / mvPer5mm);
+    //SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getAverageVoltage() / mvPer5mm);
   }
 
   @Override
@@ -295,9 +303,9 @@ public class Robot extends TimedRobot {
         tempsum-=voltReading[1];
         tempsum-=voltReading[23];
         tempsum-=voltReading[24];
-        System.out.println("Ultrasonic Sensor 0 distance in cm "+ ((5.0 * tempsum/21 / mvPer5mm) / 10));
+        //System.out.println("Ultrasonic Sensor 0 distance in cm "+ ((5.0 * tempsum/21 / mvPer5mm) / 10));
         currentDistanceTeleop = 5.0 * tempsum/20 / mvPer5mm;
-        SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
+        //SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
         tempsum = 0;
         voltReading = new double[25];
       }
