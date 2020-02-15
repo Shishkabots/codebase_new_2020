@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class StopRobot extends Command {
     public StopRobot() {
-       requires(Robot.m_drivetrain);
+       //requires(Robot.m_drivetrain);
     }
 
             // Called just before this Command runs the first time

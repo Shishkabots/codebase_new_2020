@@ -1127,11 +1127,12 @@ public class Robot extends TimedRobot {
     return -1;
   }
 
-  public static void bufferedReader() throws IOException {
+  public static void readFile() throws IOException {
     String testStr = " does this work";
-    BufferedWriter writer = new BufferedWriter(new FileWriter("/home/lvuser.txt"));
-    writer.write(testStr);
-    writer.close();
+    FileWriter fw = new FileWriter("/home/lvuser.txt");    
+    fw.write(testStr);    
+    fw.close();    
+    //BufferedReader writer = new BufferedReader(new FileWriter("/home/lvuser.txt")); // buffered writer example
   }
   @Override
   public void robotInit() {

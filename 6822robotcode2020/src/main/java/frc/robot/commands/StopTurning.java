@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class StopTurning extends Command {
     public StopTurning() {
-        requires(Robot.m_drivetrain);
+        //requires(Robot.m_drivetrain);
     }
     
     protected void initialize() {
