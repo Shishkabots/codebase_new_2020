@@ -1127,7 +1127,7 @@ public class Robot extends TimedRobot {
     return -1;
   }
 
-  public void fileTesting(MatOfPoint contour) throws IOException {
+  public void fileTesting(MatOfPoint contour, String measuredDistance) throws IOException {
     FileWriter fw = new FileWriter("/home/lvuser/distanceData/output.txt");    
     fw.write(measuredDistance); 
     System.out.println(measuredDistance);
@@ -1165,13 +1165,13 @@ public class Robot extends TimedRobot {
         if (contours.size() > 0) {
           MatOfPoint contour = getLargestContour(contours);
           //System.out.println("Vision Distances: "+ visionDistanceWidth(contour)+" "+ visionDistanceHeight(contour)+" "+averageVisionDistance(contour));      
-          
+          double a =1;
           String measuredDistance = Double.toString(averageVisionDistance(contour));
-          //double realDist = SmartDashboard.getNumber("inputted real dist", realDist);
+          double realDist = SmartDashboard.getNumber("inputted real dist", a);
 
-          if (5 + measuredDistance <= realDist && 5 - measuredDistance >= realDist) {
+          if (realDist != 0) {
             try {
-              fileTesting(contour);
+              fileTesting(contour, measuredDistance);
             }
             catch (IOException e) {
               System.out.println("no new file created");
