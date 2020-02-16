@@ -1127,26 +1127,16 @@ public class Robot extends TimedRobot {
     return -1;
   }
 
-  public void fileTesting() throws IOException {
-    String testStr = " does this work";
+  public void fileTesting(MatOfPoint contour) throws IOException {
     FileWriter fw = new FileWriter("/home/lvuser/distanceData/output.txt");    
-    fw.write(testStr);    
+    fw.write(measuredDistance); 
+    System.out.println(measuredDistance);
+    SmartDashboard.putString("measured distance", measuredDistance);
     fw.close();    
-    //BufferedReader writer = new BufferedReader(new FileWriter("/home/lvuser.txt")); // buffered writer example
   }
   @Override
   public void robotInit() {
-    try { // this "tries" the method fileTesting
-      fileTesting();
-    }
-    catch(IOException e) { // if it crashes then it catches the IOException that will be thrown and prints no file created
-      System.out.println("no new file created");
-    }
-    /*String testStr = " does this work";
-    FileWriter fw = new FileWriter("/home/lvuser/distanceData/output.txt");    
-    fw.write(testStr);    
-    fw.close();  
-    //fileTesting(File output.txt);*/
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -1174,8 +1164,9 @@ public class Robot extends TimedRobot {
         ArrayList<MatOfPoint> contours = Robot.pipeline.filterContoursOutput();
         if (contours.size() > 0) {
           MatOfPoint contour = getLargestContour(contours);
-          //System.out.println("Vision Distances: "+ visionDistanceWidth(contour)+" "+ visionDistanceHeight(contour)+" "+averageVisionDistance(contour));
-          System.out.println(averageVisionDistance(contour));
+          //System.out.println("Vision Distances: "+ visionDistanceWidth(contour)+" "+ visionDistanceHeight(contour)+" "+averageVisionDistance(contour));      
+          
+          String measuredDistance = Double.toString(averageVisionDistance(contour));
           int center[] = findCenter(contour);
           Imgproc.circle(img, new Point(center[0], center[1]), 10, new Scalar(255, 255, 0), 10);
           Rect boundingRect = Imgproc.boundingRect(contour);
@@ -1185,7 +1176,20 @@ public class Robot extends TimedRobot {
         }
         Imgproc.circle(img, new Point(imgWidth / 2, imgHeight / 2), 10, new Scalar(255, 255, 0), 10);
         outputStream.putFrame(img);
+
+        double realDist = SmartDashboard.getNumber("inputted real dist", realDist);
+      // this "tries" the method fileTesting
+        if (5 + measuredDistance <= realDist && 5 - measuredDistance >= realDist) {
+          try {
+            fileTesting(contour);
+          }
+          catch (IOException e) {
+            System.out.println("no new file created");
+          }
+        }
       }
+
+      
     });
     m_visionThread.setDaemon(true);
     m_visionThread.start();
@@ -1250,7 +1254,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    //readFile();
     cont++;
     if (cont % 1 == 0) { // uses the 25th reading
       double currVolt = m_ultrasonic0.getVoltage();
@@ -1273,8 +1276,7 @@ public class Robot extends TimedRobot {
         tempsum = 0;
         voltReading = new double[25];
       }
-      // System.out.println("readings: " + currentDistanceTeleop);
-      // }
+      //SmartDashboard.getNumber("Current distance: ", currentDistanceTeleop);
     }
   }
 
