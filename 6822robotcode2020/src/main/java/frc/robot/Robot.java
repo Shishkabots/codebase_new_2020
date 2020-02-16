@@ -99,8 +99,8 @@ public class Robot extends TimedRobot {
   public static final int imgWidth = 640;
   public static final int imgHeight = 480;
 
-  public static final int kUltrasonicPort0 = 0;
-  public static final int kUltrasonicPort1 = 1;
+  //public static final int kUltrasonicPort0 = 0;
+  //public static final int kUltrasonicPort1 = 1;
   public static final double kValueToInches = 1;
   public static final int minValue = 238;
   public static final double mvPer5mm = 0.004885;
@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
   public static Spark led;
   public static Mat img;
 
-  public static final AnalogInput m_ultrasonic0 = new AnalogInput(kUltrasonicPort0);
+  //public static final AnalogInput m_ultrasonic0 = new AnalogInput(kUltrasonicPort0);
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -1141,7 +1141,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     AnalogInput.setGlobalSampleRate(1000000.0);
-    SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getVoltage() / mvPer5mm);
+    //SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getVoltage() / mvPer5mm);
     pipeline = new GripPipeline();
     initializeDistanceTable();
 
@@ -1237,8 +1237,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    double currentDistanceAuto = ((m_ultrasonic0.getValue())) * kValueToInches;
-    SmartDashboard.putNumber("auto reading", currentDistanceAuto);
+    //double currentDistanceAuto = ((m_ultrasonic0.getValue())) * kValueToInches;
+    //SmartDashboard.putNumber("auto reading", currentDistanceAuto);
     // System.out.println("auto reading" + currentDistanceAuto);
 
     switch (m_autoSelected) {
@@ -1254,7 +1254,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    cont++;
+    /*cont++;
     if (cont % 1 == 0) { // uses the 25th reading
       double currVolt = m_ultrasonic0.getVoltage();
       double currentDistanceTeleop = 0;
@@ -1277,7 +1277,7 @@ public class Robot extends TimedRobot {
         voltReading = new double[25];
       }
       //SmartDashboard.getNumber("Current distance: ", currentDistanceTeleop);
-    }
+    }*/
   }
 
   @Override
