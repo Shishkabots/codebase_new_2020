@@ -1127,15 +1127,26 @@ public class Robot extends TimedRobot {
     return -1;
   }
 
-  public static void readFile() throws IOException {
+  public void fileTesting() throws IOException {
     String testStr = " does this work";
-    FileWriter fw = new FileWriter("/home/lvuser.txt");    
+    FileWriter fw = new FileWriter("/home/lvuser/distanceData/output.txt");    
     fw.write(testStr);    
     fw.close();    
     //BufferedReader writer = new BufferedReader(new FileWriter("/home/lvuser.txt")); // buffered writer example
   }
   @Override
   public void robotInit() {
+    try { // this "tries" the method fileTesting
+      fileTesting();
+    }
+    catch(IOException e) { // if it crashes then it catches the IOException that will be thrown and prints no file created
+      System.out.println("no new file created");
+    }
+    /*String testStr = " does this work";
+    FileWriter fw = new FileWriter("/home/lvuser/distanceData/output.txt");    
+    fw.write(testStr);    
+    fw.close();  
+    //fileTesting(File output.txt);*/
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -1239,6 +1250,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    //readFile();
     cont++;
     if (cont % 1 == 0) { // uses the 25th reading
       double currVolt = m_ultrasonic0.getVoltage();
