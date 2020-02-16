@@ -1167,6 +1167,16 @@ public class Robot extends TimedRobot {
           //System.out.println("Vision Distances: "+ visionDistanceWidth(contour)+" "+ visionDistanceHeight(contour)+" "+averageVisionDistance(contour));      
           
           String measuredDistance = Double.toString(averageVisionDistance(contour));
+          //double realDist = SmartDashboard.getNumber("inputted real dist", realDist);
+
+          if (5 + measuredDistance <= realDist && 5 - measuredDistance >= realDist) {
+            try {
+              fileTesting(contour);
+            }
+            catch (IOException e) {
+              System.out.println("no new file created");
+            }
+          }
           int center[] = findCenter(contour);
           Imgproc.circle(img, new Point(center[0], center[1]), 10, new Scalar(255, 255, 0), 10);
           Rect boundingRect = Imgproc.boundingRect(contour);
@@ -1177,16 +1187,6 @@ public class Robot extends TimedRobot {
         Imgproc.circle(img, new Point(imgWidth / 2, imgHeight / 2), 10, new Scalar(255, 255, 0), 10);
         outputStream.putFrame(img);
 
-        double realDist = SmartDashboard.getNumber("inputted real dist", realDist);
-      // this "tries" the method fileTesting
-        if (5 + measuredDistance <= realDist && 5 - measuredDistance >= realDist) {
-          try {
-            fileTesting(contour);
-          }
-          catch (IOException e) {
-            System.out.println("no new file created");
-          }
-        }
       }
 
       
