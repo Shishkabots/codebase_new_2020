@@ -120,11 +120,11 @@ public class Robot extends TimedRobot {
   private double[] voltReading = new double[25];
 
   public final double FOVAngleWidth = Math.toRadians(58.5) / 2; // degrees
-  public final double TcmWidth = 104.0;// width of vision target in cm
+  public final double TcmWidth = 99.695;// width of vision target in cm
   public final int FOVpixelWidth = Robot.imgWidth;
 
   public final double FOVAngleHeight = Math.toRadians(45.6) / 2;
-  public final double TcmHeight = 45.0; // heigh of vision target in cm
+  public final double TcmHeight = 43.18; // heigh of vision target in cm
   public final int FOVpixelHeight = Robot.imgHeight;
 
   public final double Tratio = 0.475;// TcmHeight/TcmWidth;
@@ -169,8 +169,13 @@ public class Robot extends TimedRobot {
     return (1.375 * distY) + 5;
   }
 
+  private double visionError(double measuredDistance)
+  {
+    return -(0.128*measuredDistance+0.000273*(measuredDistance*measuredDistance))/1.5;
+  }
   public double averageVisionDistance(MatOfPoint contour) {
-    return (visionDistanceHeight(contour) + visionDistanceWidth(contour)) / 2.0;
+    double measuredDistance =  (visionDistanceHeight(contour) + visionDistanceWidth(contour)) / 2.0;
+    return measuredDistance - visionError(measuredDistance);
   }
 
   public void initializeDistanceTable() {
@@ -1166,17 +1171,17 @@ public class Robot extends TimedRobot {
           MatOfPoint contour = getLargestContour(contours);
           //System.out.println("Vision Distances: "+ visionDistanceWidth(contour)+" "+ visionDistanceHeight(contour)+" "+averageVisionDistance(contour));      
           double a =1;
-          String measuredDistance = Double.toString(averageVisionDistance(contour));
-          double realDist = SmartDashboard.getNumber("inputted real dist", a);
-
-          if (realDist != 0) {
+          //String measuredDistance = Double.toString(averageVisionDistance(contour));
+          //double realDist = SmartDashboard.getNumber("inputted real dist", a);
+          System.out.println(visionDistanceHeight(contour)+" "+visionDistanceWidth(contour)+" "+averageVisionDistance(contour));
+          /*if (realDist != 0) {
             try {
               fileTesting(contour, measuredDistance);
             }
             catch (IOException e) {
               System.out.println("no new file created");
             }
-          }
+          }*/
           int center[] = findCenter(contour);
           Imgproc.circle(img, new Point(center[0], center[1]), 10, new Scalar(255, 255, 0), 10);
           Rect boundingRect = Imgproc.boundingRect(contour);

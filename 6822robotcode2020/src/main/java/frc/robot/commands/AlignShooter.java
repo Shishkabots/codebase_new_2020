@@ -25,7 +25,8 @@ public class AlignShooter extends CommandGroup {
     public int errorx, errory;
 
     public double getDistMeter() {
-        return 5.0 * Robot.m_ultrasonic0.getVoltage() / Robot.mvPer5mm / 1000;
+        return 0;
+        //return 5.0 * Robot.m_ultrasonic0.getVoltage() / Robot.mvPer5mm / 1000;
     }
 
     public int[] findCenter() {
