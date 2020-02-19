@@ -9,12 +9,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.AnalogInput;
 
 import edu.wpi.first.wpilibj.Timer;
 
 public class Shoot extends CommandGroup {
     double d;
     double u;
+    AnalogInput beam2 = Robot.beam2;
+    boolean ball2 = true;
     public Shoot(double a, double b) {
         //a AND b ARE THE HORIZONTAL AND VERTICAL TARGET DISTANCES RESPECTIVELY
         this.d= a;
@@ -34,6 +37,12 @@ public class Shoot extends CommandGroup {
         double v = Math.sqrt(num);
         //v IS THE VELOCITY WE NEED TO SHOOT AT
         //THIS IS A COMMAND GORUP SO THAT YOU ARE ABLE TO ADD A SHOOT COMMAND USING v AS AN INPUT
+        if(ball2 && beam2.getValue() <= 100) {
+            ball2 = false;
+          }else if(!ball2 && beam2.getValue() > 100) {
+            ball2 = true;
+            Robot.ballcount--;
+          }
     }
 
    

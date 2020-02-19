@@ -130,9 +130,9 @@ public class Robot extends TimedRobot {
   public final double Tratio = 0.475;// TcmHeight/TcmWidth;
   private TreeMap<Double, Double> distances = new TreeMap<Double, Double>();
 
-  private AnalogInput beam1;
-  private AnalogInput beam2;
-  private boolean ball;
+  private static AnalogInput beam1;
+  public  static AnalogInput beam2;
+  public static boolean ball;
   public static int ballcount;
 
   public int[] findCenter(MatOfPoint contour) {
