@@ -130,6 +130,11 @@ public class Robot extends TimedRobot {
   public final double Tratio = 0.475;// TcmHeight/TcmWidth;
   private TreeMap<Double, Double> distances = new TreeMap<Double, Double>();
 
+  private AnalogInput beam1;
+  private AnalogInput beam2;
+  private boolean ball;
+  public static int ballcount;
+
   public int[] findCenter(MatOfPoint contour) {
     // [x,y]
     int[] centerCoor = { -1, -1 };
@@ -1226,6 +1231,10 @@ public class Robot extends TimedRobot {
     m_drive = new DifferentialDrive(drive1, drive2);
     SmartDashboard.putData(m_drive);
     m_drivetrain = new DriveTrain(m_drive);
+
+    beam1 = new AnalogInput(3);
+    beam2 = new AnalogInput(4);
+    ball = true;
   }
 
   @Override
@@ -1283,6 +1292,12 @@ public class Robot extends TimedRobot {
       }
       //SmartDashboard.getNumber("Current distance: ", currentDistanceTeleop);
     }*/
+    if(ball && beam1.getValue() <= 100) {
+      ball = false;
+    }else if(!ball && beam1.getValue() > 100) {
+      ball = true;
+      ballcount++;
+    }
   }
 
   @Override
