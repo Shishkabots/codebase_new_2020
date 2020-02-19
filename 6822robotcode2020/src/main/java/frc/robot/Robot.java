@@ -99,8 +99,8 @@ public class Robot extends TimedRobot {
   public static final int imgWidth = 640;
   public static final int imgHeight = 480;
 
-  public static final int kUltrasonicPort0 = 0;
-  public static final int kUltrasonicPort1 = 1;
+  //public static final int kUltrasonicPort0 = 0;
+  //public static final int kUltrasonicPort1 = 1;
   public static final double kValueToInches = 1;
   public static final int minValue = 238;
   public static final double mvPer5mm = 0.004885;
@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
   public static Spark led;
   public static Mat img;
 
-  public static final AnalogInput m_ultrasonic0 = new AnalogInput(kUltrasonicPort0);
+  //public static final AnalogInput m_ultrasonic0 = new AnalogInput(kUltrasonicPort0);
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -120,15 +120,20 @@ public class Robot extends TimedRobot {
   private double[] voltReading = new double[25];
 
   public final double FOVAngleWidth = Math.toRadians(58.5) / 2; // degrees
-  public final double TcmWidth = 104.0;// width of vision target in cm
+  public final double TcmWidth = 99.695;// width of vision target in cm
   public final int FOVpixelWidth = Robot.imgWidth;
 
   public final double FOVAngleHeight = Math.toRadians(45.6) / 2;
-  public final double TcmHeight = 45.0; // heigh of vision target in cm
+  public final double TcmHeight = 43.18; // heigh of vision target in cm
   public final int FOVpixelHeight = Robot.imgHeight;
 
   public final double Tratio = 0.475;// TcmHeight/TcmWidth;
   private TreeMap<Double, Double> distances = new TreeMap<Double, Double>();
+
+  private AnalogInput beam1;
+  private AnalogInput beam2;
+  private boolean ball;
+  public static int ballcount;
 
   public int[] findCenter(MatOfPoint contour) {
     // [x,y]
@@ -169,8 +174,13 @@ public class Robot extends TimedRobot {
     return (1.375 * distY) + 5;
   }
 
+  private double visionError(double measuredDistance)
+  {
+    return -(0.128*measuredDistance+0.000273*(measuredDistance*measuredDistance))/1.5;
+  }
   public double averageVisionDistance(MatOfPoint contour) {
-    return (visionDistanceHeight(contour) + visionDistanceWidth(contour)) / 2.0;
+    double measuredDistance =  (visionDistanceHeight(contour) + visionDistanceWidth(contour)) / 2.0;
+    return measuredDistance - visionError(measuredDistance);
   }
 
   public void initializeDistanceTable() {
@@ -1141,7 +1151,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     AnalogInput.setGlobalSampleRate(1000000.0);
-    SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getVoltage() / mvPer5mm);
+    //SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getVoltage() / mvPer5mm);
     pipeline = new GripPipeline();
     initializeDistanceTable();
 
@@ -1166,17 +1176,17 @@ public class Robot extends TimedRobot {
           MatOfPoint contour = getLargestContour(contours);
           //System.out.println("Vision Distances: "+ visionDistanceWidth(contour)+" "+ visionDistanceHeight(contour)+" "+averageVisionDistance(contour));      
           double a =1;
-          String measuredDistance = Double.toString(averageVisionDistance(contour));
-          double realDist = SmartDashboard.getNumber("inputted real dist", a);
-
-          if (realDist != 0) {
+          //String measuredDistance = Double.toString(averageVisionDistance(contour));
+          //double realDist = SmartDashboard.getNumber("inputted real dist", a);
+          System.out.println(visionDistanceHeight(contour)+" "+visionDistanceWidth(contour)+" "+averageVisionDistance(contour));
+          /*if (realDist != 0) {
             try {
               fileTesting(contour, measuredDistance);
             }
             catch (IOException e) {
               System.out.println("no new file created");
             }
-          }
+          }*/
           int center[] = findCenter(contour);
           Imgproc.circle(img, new Point(center[0], center[1]), 10, new Scalar(255, 255, 0), 10);
           Rect boundingRect = Imgproc.boundingRect(contour);
@@ -1218,11 +1228,13 @@ public class Robot extends TimedRobot {
 
     m_turret = new Turret(turret);
 
-    //m_drive = new DifferentialDrive(drive1, drive2);
-    //SmartDashboard.putData(m_drive);
-    //m_drivetrain = new DriveTrain(m_drive);
+    m_drive = new DifferentialDrive(drive1, drive2);
+    SmartDashboard.putData(m_drive);
+    m_drivetrain = new DriveTrain(m_drive);
 
-
+    beam1 = new AnalogInput(3);
+    beam2 = new AnalogInput(4);
+    ball = true;
   }
 
   @Override
@@ -1239,8 +1251,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    double currentDistanceAuto = ((m_ultrasonic0.getValue())) * kValueToInches;
-    SmartDashboard.putNumber("auto reading", currentDistanceAuto);
+    //double currentDistanceAuto = ((m_ultrasonic0.getValue())) * kValueToInches;
+    //SmartDashboard.putNumber("auto reading", currentDistanceAuto);
     // System.out.println("auto reading" + currentDistanceAuto);
 
     switch (m_autoSelected) {
@@ -1256,13 +1268,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    drive2.set(ControlMode.PercentOutput, 0.5); // this makes it run on start
     slave2.set(ControlMode.PercentOutput, 0.5); // this makes it run on start
     cont++;
-    if (cont % 1 == 0) { // uses the 25th reading
-      double currVolt = m_ultrasonic0.getVoltage();
-      double currentDistanceTeleop = 0;
-      tempsum += currVolt;
+    /*if (cont % 1 == 0) { // uses the 25th reading
       voltReading[(cont) % 25] = currVolt;
       // System.out.println(tempsum+" "+cont);
       // double currentDistanceTeleop = (m_ultrasonic.getAverageVoltage()-minVoltage)
@@ -1279,8 +1287,13 @@ public class Robot extends TimedRobot {
         //SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
         tempsum = 0;
         voltReading = new double[25];
-      }
+      }*/
       //SmartDashboard.getNumber("Current distance: ", currentDistanceTeleop);
+    if(ball && beam1.getValue() <= 100) {
+      ball = false;
+    }else if(!ball && beam1.getValue() > 100) {
+      ball = true;
+      ballcount++;
     }
   }
 
