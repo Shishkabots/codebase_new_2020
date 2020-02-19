@@ -1194,33 +1194,35 @@ public class Robot extends TimedRobot {
     m_visionThread.setDaemon(true);
     m_visionThread.start();
 
-    climb1 = new WPI_VictorSPX(1);
-    climb2 = new WPI_VictorSPX(2);
+    climb1 = new WPI_VictorSPX(9); // done
+    climb2 = new WPI_VictorSPX(10); // done
 
-    storage = new WPI_VictorSPX(3);
-    intake = new WPI_VictorSPX(4);
+    storage = new WPI_VictorSPX(12); // done
+    intake = new WPI_VictorSPX(8); // done
 
-    arm1 = new WPI_TalonSRX(5);
-    arm2 = new WPI_VictorSPX(6);
+    arm1 = new WPI_TalonSRX(5); // done
+    arm2 = new WPI_VictorSPX(11); // done
 
-    shoot1 = new WPI_TalonSRX(7);
-    shoot2 = new WPI_VictorSPX(8);
+    shoot1 = new WPI_TalonSRX(6); //done
+    shoot2 = new WPI_VictorSPX(7); // done
 
     shoot1.configPeakCurrentLimit(60);
     shoot1.configContinuousCurrentLimit(28);
 
-    drive1 = new WPI_TalonFX(9);
-    drive2 = new WPI_TalonFX(10);
-    slave1 = new WPI_TalonFX(11);
-    slave2 = new WPI_TalonFX(12);
+    drive1 = new WPI_TalonFX(1); //done
+    slave1 = new WPI_TalonFX(2); //done
+    drive2 = new WPI_TalonFX(3); // done
+    slave2 = new WPI_TalonFX(4); //done
 
-    turret = new WPI_VictorSPX(13);
+    turret = new WPI_VictorSPX(13); // not done yet
 
     m_turret = new Turret(turret);
 
-    m_drive = new DifferentialDrive(drive1, drive2);
-    SmartDashboard.putData(m_drive);
-    m_drivetrain = new DriveTrain(m_drive);
+    //m_drive = new DifferentialDrive(drive1, drive2);
+    //SmartDashboard.putData(m_drive);
+    //m_drivetrain = new DriveTrain(m_drive);
+
+
   }
 
   @Override
@@ -1254,6 +1256,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    drive2.set(ControlMode.PercentOutput, 0.5); // this makes it run on start
+    slave2.set(ControlMode.PercentOutput, 0.5); // this makes it run on start
     cont++;
     if (cont % 1 == 0) { // uses the 25th reading
       double currVolt = m_ultrasonic0.getVoltage();
