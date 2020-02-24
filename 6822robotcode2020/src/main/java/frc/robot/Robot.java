@@ -90,6 +90,9 @@ public class Robot extends TimedRobot {
   public static Shooter m_shooter;
   public static StorageFeed m_storage;
   public static Turret m_turret;
+    
+  public static DoubleSolenoid leftSide = new DoubleSolenoid(0, 1);
+  public static DoubleSolenoid rightSide = new DoubleSolenoid(4,5);
 
   public static OI m_oi;
   public static Thread m_visionThread;
@@ -110,6 +113,10 @@ public class Robot extends TimedRobot {
 
   //public static final AnalogInput m_ultrasonic0 = new AnalogInput(kUltrasonicPort0);
 
+  
+  public static IntakeDropper m_dropper = new IntakeDropper();
+
+  public static boolean testing;
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -1146,6 +1153,9 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void robotInit() {
+
+    leftSide.set(DoubleSolenoid.Value.kForward);
+    rightSide.set(DoubleSolenoid.Value.kForward);
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
