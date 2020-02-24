@@ -1268,7 +1268,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    slave2.set(ControlMode.PercentOutput, 0.5); // this makes it run on start
+    drive2.set(ControlMode.PercentOutput, 0.1); // this makes it run on start
+    slave2.set(ControlMode.PercentOutput, 0.1);
+    drive1.set(ControlMode.PercentOutput, -0.1);
+    slave1.set(ControlMode.PercentOutput, -0.1);
     cont++;
     /*if (cont % 1 == 0) { // uses the 25th reading
       voltReading[(cont) % 25] = currVolt;
