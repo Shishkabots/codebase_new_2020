@@ -1260,6 +1260,23 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void teleopInit() {
+    // This makes sure that the autonomous stops running when
+    // teleop starts running. If you want the autonomous to
+    // continue until interrupted by another command, remove
+    // this line or comment it out.
+    /*if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }*/
+    if(testing) {
+      //SmartDashboard.putString("Progress:", "Reached T_OP Init");
+    }
+    new TeleOpCommands().start();
+    
+    //new VisionProcess().start();
+  }
+
+  @Override
   public void autonomousPeriodic() {
     //double currentDistanceAuto = ((m_ultrasonic0.getValue())) * kValueToInches;
     //SmartDashboard.putNumber("auto reading", currentDistanceAuto);
