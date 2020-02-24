@@ -142,6 +142,8 @@ public class Robot extends TimedRobot {
   public static boolean ball;
   public static int ballcount;
 
+  public static Encoder encoder;
+
   public int[] findCenter(MatOfPoint contour) {
     // [x,y]
     int[] centerCoor = { -1, -1 };
@@ -1153,7 +1155,8 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void robotInit() {
-    
+    encoder = new Encoder(0, 1);
+
     //leftSide.set(DoubleSolenoid.Value.kForward);
     //rightSide.set(DoubleSolenoid.Value.kForward);
 
@@ -1298,13 +1301,24 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    arm1.set(0.1);
-    System.out.println(arm1.getSelectedSensorPosition(0));
-    //drive2.set(ControlMode.PercentOutput, 1); // this makes it run on start
-    //slave2.set(ControlMode.PercentOutput, 1);
-    //drive1.set(ControlMode.PercentOutput, -1);
-    //slave1.set(ControlMode.PercentOutput, -1);
     //cont++;
+    System.out.println(arm1.getSelectedSensorPosition(0));
+    
+    if(Math.abs(arm1.getSelectedSensorPosition(0))<180)
+    {
+      arm1.set(0.1);
+    }
+    //System.out.println(arm1.getSelectedSensorPosition(0));
+    /*if(cont>150)
+    {
+      arm1.set(0.1);
+      System.out.println(arm1.getSelectedSensorPosition(0));
+    }
+    else
+    {
+      arm1.set(-0.1);
+      System.out.println(arm1.getSelectedSensorPosition(0));
+    }*/
     /*if (cont % 1 == 0) { // uses the 25th reading
       voltReading[(cont) % 25] = currVolt;
       // System.out.println(tempsum+" "+cont);
