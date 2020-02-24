@@ -1153,7 +1153,7 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void robotInit() {
-
+    
     //leftSide.set(DoubleSolenoid.Value.kForward);
     //rightSide.set(DoubleSolenoid.Value.kForward);
 
@@ -1245,6 +1245,7 @@ public class Robot extends TimedRobot {
     beam1 = new AnalogInput(3);
     beam2 = new AnalogInput(4);
     ball = true;
+    new TeleOpCommands().start();
   }
 
   @Override
@@ -1295,11 +1296,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    drive2.set(ControlMode.PercentOutput, 1); // this makes it run on start
-    slave2.set(ControlMode.PercentOutput, 1);
-    drive1.set(ControlMode.PercentOutput, -1);
-    slave1.set(ControlMode.PercentOutput, -1);
-    cont++;
+    //drive2.set(ControlMode.PercentOutput, 1); // this makes it run on start
+    //slave2.set(ControlMode.PercentOutput, 1);
+    //drive1.set(ControlMode.PercentOutput, -1);
+    //slave1.set(ControlMode.PercentOutput, -1);
+    //cont++;
     /*if (cont % 1 == 0) { // uses the 25th reading
       voltReading[(cont) % 25] = currVolt;
       // System.out.println(tempsum+" "+cont);

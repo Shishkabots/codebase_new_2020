@@ -59,7 +59,7 @@ public class DriveTrainControl extends Command {
             ((turnAxis * turnCoef * turboMultiplier) + turnFF) * turnDirection, 
             true
         );
-
+        System.out.println(lTrigger+" "+rTrigger+" "+turnAxis);
         
         
     }
