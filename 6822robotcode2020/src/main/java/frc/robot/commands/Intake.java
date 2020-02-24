@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-public class Intake extends Command {
+/*public class Intake extends Command {
     private int timecounter = 0;
     private final int endtime = 30;
     
@@ -74,4 +74,4 @@ public class Intake extends Command {
     protected void interrupted() {
     	Robot.m_dropper.setState("Off");
     }
-}
+}*/

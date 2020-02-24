@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 /**
  *
  */
-public class IntakeDropper extends Subsystem {
+/*public class IntakeDropper extends Subsystem {
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -39,4 +39,4 @@ public class IntakeDropper extends Subsystem {
             Robot.rightSide.set(DoubleSolenoid.Value.kReverse);
         }
     }
-}
+}*/
