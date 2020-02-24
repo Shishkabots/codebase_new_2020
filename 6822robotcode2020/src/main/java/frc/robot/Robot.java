@@ -1160,7 +1160,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    AnalogInput.setGlobalSampleRate(1000000.0);
+    AnalogInput.setGlobalSampleRate(100.0);
     //SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getVoltage() / mvPer5mm);
     pipeline = new GripPipeline();
     initializeDistanceTable();
@@ -1240,12 +1240,11 @@ public class Robot extends TimedRobot {
 
     m_drive = new DifferentialDrive(drive1, drive2);
     SmartDashboard.putData(m_drive);
-    m_drivetrain = new DriveTrain(m_drive);
+    m_drivetrain = new DriveTrain();
 
     beam1 = new AnalogInput(3);
     beam2 = new AnalogInput(4);
     ball = true;
-    new TeleOpCommands().start();
   }
 
   @Override
@@ -1292,6 +1291,8 @@ public class Robot extends TimedRobot {
       // Put default auto code here
       break;
     }
+    //System.out.println("testing the drivetrain");
+    //new TeleOpCommands().start();
   }
 
   @Override
