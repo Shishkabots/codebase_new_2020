@@ -1221,6 +1221,7 @@ public class Robot extends TimedRobot {
     intake = new WPI_VictorSPX(8); // done
 
     arm1 = new WPI_TalonSRX(5); // done
+    arm1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     arm2 = new WPI_VictorSPX(11); // done
 
     shoot1 = new WPI_TalonSRX(6); //done
@@ -1297,6 +1298,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    arm1.set(0.1);
+    System.out.println(arm1.getSelectedSensorPosition(0));
     //drive2.set(ControlMode.PercentOutput, 1); // this makes it run on start
     //slave2.set(ControlMode.PercentOutput, 1);
     //drive1.set(ControlMode.PercentOutput, -1);
