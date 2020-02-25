@@ -24,11 +24,9 @@ public class Shooter extends Subsystem {
 
 	public Shooter(TalonSRX a, VictorSPX b)
 	{
-
         lead = a;
         slave = b;
         slave.follow(lead);
-        
     }
 
     public void initDefaultCommand() {
