@@ -1227,6 +1227,7 @@ public class Robot extends TimedRobot {
     arm1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     arm1.setSelectedSensorPosition(0);
     arm2 = new WPI_VictorSPX(11); // done
+    arm1.setSelectedSensorPosition(0);
 
     shoot1 = new WPI_TalonSRX(6); //done
     shoot2 = new WPI_VictorSPX(7); // done
@@ -1308,6 +1309,10 @@ public class Robot extends TimedRobot {
     if(Math.abs(arm1.getSelectedSensorPosition(0))<360)
     {
       arm1.set(0.1);
+    }
+    else
+    {
+      arm1.set(0);
     }
     //System.out.println(arm1.getSelectedSensorPosition(0));
     /*if(cont>150)
