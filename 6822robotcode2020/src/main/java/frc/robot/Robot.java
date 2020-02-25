@@ -1274,9 +1274,6 @@ public class Robot extends TimedRobot {
     /*if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }*/
-    if(testing) {
-      //SmartDashboard.putString("Progress:", "Reached T_OP Init");
-    }
     new TeleOpCommands().start();
     
     //new VisionProcess().start();
@@ -1284,29 +1281,23 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    //double currentDistanceAuto = ((m_ultrasonic0.getValue())) * kValueToInches;
-    //SmartDashboard.putNumber("auto reading", currentDistanceAuto);
-    // System.out.println("auto reading" + currentDistanceAuto);
 
     switch (m_autoSelected) {
     case kCustomAuto:
-      // Put custom auto code here
       break;
     case kDefaultAuto:
     default:
-      // Put default auto code here
       break;
     }
-    //System.out.println("testing the drivetrain");
-    //new TeleOpCommands().start();
   }
 
   @Override
   public void teleopPeriodic() {
-    //cont++;
+    //cont++; 
+    Scheduler.getInstance().run();
     System.out.println(arm1.getSelectedSensorPosition(0));
     
-    if(Math.abs(arm1.getSelectedSensorPosition(0))<360)
+    if(Math.abs(arm1.getSelectedSensorPosition(0))<4096)
     {
       arm1.set(0.1);
     }
@@ -1325,25 +1316,6 @@ public class Robot extends TimedRobot {
       arm1.set(-0.1);
       System.out.println(arm1.getSelectedSensorPosition(0));
     }*/
-    /*if (cont % 1 == 0) { // uses the 25th reading
-      voltReading[(cont) % 25] = currVolt;
-      // System.out.println(tempsum+" "+cont);
-      // double currentDistanceTeleop = (m_ultrasonic.getAverageVoltage()-minVoltage)
-      // * kValueToInches;
-      // if(cont%25 == 0) {
-      if (cont % (25) == 0) {
-        Arrays.sort(voltReading);
-        tempsum-=voltReading[0];
-        tempsum-=voltReading[1];
-        tempsum-=voltReading[23];
-        tempsum-=voltReading[24];
-        //System.out.println("Ultrasonic Sensor 0 distance in cm "+ ((5.0 * tempsum/21 / mvPer5mm) / 10));
-        currentDistanceTeleop = 5.0 * tempsum/20 / mvPer5mm;
-        //SmartDashboard.putNumber("Teleop Distance", currentDistanceTeleop);
-        tempsum = 0;
-        voltReading = new double[25];
-      }*/
-      //SmartDashboard.getNumber("Current distance: ", currentDistanceTeleop);
     if(ball && beam1.getValue() <= 100) {
       ball = false;
     }else if(!ball && beam1.getValue() > 100) {
