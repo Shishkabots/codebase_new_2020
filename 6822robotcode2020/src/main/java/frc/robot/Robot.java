@@ -70,7 +70,6 @@ public class Robot extends TimedRobot {
 
   public static WPI_TalonSRX arm1;
   public static WPI_VictorSPX arm2;
-  public static int arm1Initial;
 
   public static WPI_TalonSRX shoot1;
   public static WPI_VictorSPX shoot2;
@@ -1226,8 +1225,8 @@ public class Robot extends TimedRobot {
 
     arm1 = new WPI_TalonSRX(5); // done
     arm1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    arm1.setSelectedSensorPosition(0);
     arm2 = new WPI_VictorSPX(11); // done
-    arm1Initial = arm1.getSelectedSensorPosition();
 
     shoot1 = new WPI_TalonSRX(6); //done
     shoot2 = new WPI_VictorSPX(7); // done
@@ -1306,7 +1305,7 @@ public class Robot extends TimedRobot {
     //cont++;
     System.out.println(arm1.getSelectedSensorPosition(0));
     
-    if(Math.abs(arm1.getSelectedSensorPosition(0)-arm1Initial)<360)
+    if(Math.abs(arm1.getSelectedSensorPosition(0))<360)
     {
       arm1.set(0.1);
     }
