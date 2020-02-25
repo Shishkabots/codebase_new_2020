@@ -1294,17 +1294,22 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //cont++; 
-    Scheduler.getInstance().run();
-    System.out.println(arm1.getSelectedSensorPosition(0));
     
-    if(Math.abs(arm1.getSelectedSensorPosition(0))<4096)
+    //Scheduler.getInstance().run();
+    //System.out.println(arm1.getSelectedSensorPosition(0));
+    
+    /*if(Math.abs(arm1.getSelectedSensorPosition(0))<4096)
     {
       arm1.set(0.1);
     }
     else
     {
       arm1.set(0);
-    }
+    }*/
+
+    shoot1.set(-0.15);
+    //shoot2.set(-0.15);
+    
     //System.out.println(arm1.getSelectedSensorPosition(0));
     /*if(cont>150)
     {
