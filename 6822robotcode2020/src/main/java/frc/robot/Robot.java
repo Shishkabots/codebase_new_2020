@@ -1149,14 +1149,14 @@ public class Robot extends TimedRobot {
   public void fileTesting(MatOfPoint contour, String measuredDistance) throws IOException {
     FileWriter fw = new FileWriter("/home/lvuser/distanceData/output.txt");    
     fw.write(measuredDistance); 
-    System.out.println(measuredDistance);
+    //System.out.println(measuredDistance);
     SmartDashboard.putString("measured distance", measuredDistance);
     fw.close();    
   }
   @Override
   public void robotInit() {
     encoder = new Encoder(0, 1);
-
+    encoder.reset();
     //leftSide.set(DoubleSolenoid.Value.kForward);
     //rightSide.set(DoubleSolenoid.Value.kForward);
 
@@ -1191,7 +1191,7 @@ public class Robot extends TimedRobot {
           double a =1;
           //String measuredDistance = Double.toString(averageVisionDistance(contour));
           //double realDist = SmartDashboard.getNumber("inputted real dist", a);
-          System.out.println(visionDistanceHeight(contour)+" "+visionDistanceWidth(contour)+" "+averageVisionDistance(contour));
+          //System.out.println(visionDistanceHeight(contour)+" "+visionDistanceWidth(contour)+" "+averageVisionDistance(contour));
           /*if (realDist != 0) {
             try {
               fileTesting(contour, measuredDistance);
@@ -1274,6 +1274,7 @@ public class Robot extends TimedRobot {
     /*if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }*/
+    arm1.setSelectedSensorPosition(0);
     new TeleOpCommands().start();
     
     //new VisionProcess().start();
@@ -1293,12 +1294,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    //cont++; 
+    cont++; 
     
     //Scheduler.getInstance().run();
-    //System.out.println(arm1.getSelectedSensorPosition(0));
     
-    /*if(Math.abs(arm1.getSelectedSensorPosition(0))<4096)
+    /*System.out.println(arm1.getSelectedSensorPosition(0));
+    if(Math.abs(arm1.getSelectedSensorPosition(0))<40000)
+    {
+      arm1.set(0.75);
+    }
+    else if(Math.abs(arm1.getSelectedSensorPosition(0))>41000)
     {
       arm1.set(0.1);
     }
@@ -1307,10 +1312,13 @@ public class Robot extends TimedRobot {
       arm1.set(0);
     }*/
 
-    shoot1.set(-0.15);
-    //shoot2.set(-0.15);
+    arm1.set(-0.075);
+    shoot1.set(0.5);
+    shoot2.set(-0.5);
     
-    //System.out.println(arm1.getSelectedSensorPosition(0));
+    //System.out.println(encoder.getRate());
+
+
     /*if(cont>150)
     {
       arm1.set(0.1);
