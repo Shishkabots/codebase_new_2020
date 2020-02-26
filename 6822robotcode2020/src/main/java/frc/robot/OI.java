@@ -33,6 +33,8 @@ public class OI {
         // double rTrigger = Robot.m_oi.controllerTwo.getRawAxis(3);
       // TurnTurret.java:
         // double turnAxis = Robot.m_oi.controllerTwo.getRawAxis(4);
+      // ManualShooter.java:
+        // double voltageAxis = Robot.m_oi.controllerTwo.getRawAxis(1);
 
   
     public OI() {

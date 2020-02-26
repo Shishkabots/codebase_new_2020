@@ -11,5 +11,6 @@ public class TeleOpCommands extends CommandGroup {
     public TeleOpCommands() {
         //addParallel(new DriveTrainControl());
         addParallel(new TurnTurret());
+        addParallel(new ManualShooter());
     }
 }
