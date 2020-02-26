@@ -68,13 +68,13 @@ public class Robot extends TimedRobot {
   public static WPI_VictorSPX storage;
   public static WPI_VictorSPX intake;
 
-  public static WPI_TalonSRX arm1;
+  public static WPI_VictorSPX arm1;
   public static WPI_VictorSPX arm2;
 
   public static WPI_TalonSRX shoot1;
   public static WPI_VictorSPX shoot2;
 
-  public static WPI_VictorSPX turret;
+  public static WPI_TalonSRX turret;
 
   public static WPI_TalonFX drive1;
   public static WPI_TalonFX drive2;
@@ -1223,7 +1223,7 @@ public class Robot extends TimedRobot {
     storage = new WPI_VictorSPX(12); // done
     intake = new WPI_VictorSPX(8); // done
 
-    arm1 = new WPI_TalonSRX(5); // done
+    arm1 = new WPI_VictorSPX(13); // done
     arm1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     arm1.setSelectedSensorPosition(0);
     arm2 = new WPI_VictorSPX(11); // done
@@ -1240,7 +1240,7 @@ public class Robot extends TimedRobot {
     drive2 = new WPI_TalonFX(3); // done
     slave2 = new WPI_TalonFX(4); //done
 
-    turret = new WPI_VictorSPX(13); // not done yet
+    turret = new WPI_TalonSRX(5); // not done yet
 
     m_turret = new Turret(turret);
 
@@ -1312,9 +1312,9 @@ public class Robot extends TimedRobot {
       arm1.set(0);
     }*/
 
-    arm1.set(-0.075);
-    shoot1.set(0.5);
-    shoot2.set(-0.5);
+    //arm1.set(-0.075);
+    //shoot1.set(0.5);
+    //shoot2.set(-0.5);
     
     //System.out.println(encoder.getRate());
 

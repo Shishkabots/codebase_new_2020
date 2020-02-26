@@ -20,6 +20,20 @@ public class OI {
     public Button turn180 = new JoystickButton(controllerOne, 9); // click the left joystick
     public Button climbButton = new JoystickButton(controllerTwo, 4); // Y
     public Button flashColor = new JoystickButton(controllerTwo, 1); // A
+
+    // controller axes:
+    // controllerOne: 
+      // DriveTrainControl.java:
+        // double lTrigger = Robot.m_oi.controllerOne.getRawAxis(2);
+        // double rTrigger = Robot.m_oi.controllerOne.getRawAxis(3);
+        // double turnAxis = Robot.m_oi.controllerOne.getRawAxis(4);
+    // controllerTwo:
+      // TurnIntake.java:
+        // double lTrigger = Robot.m_oi.controllerTwo.getRawAxis(2);
+        // double rTrigger = Robot.m_oi.controllerTwo.getRawAxis(3);
+      // TurnTurret.java:
+        // double turnAxis = Robot.m_oi.controllerTwo.getRawAxis(4);
+
   
     public OI() {
       climbButton.whenPressed(new ActivateClimb());

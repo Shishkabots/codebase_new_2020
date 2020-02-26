@@ -20,7 +20,7 @@ public class Shoot extends CommandGroup {
     boolean ball2 = true;
     public Shoot(double a, double b) {
         //a AND b ARE THE HORIZONTAL AND VERTICAL TARGET DISTANCES RESPECTIVELY
-        this.d= a;
+        this.d = a;
         this.u = b;
     }
     //SET Robot.theta FROM Robot.java DEPENDING ON FINAL DESIGN
@@ -37,12 +37,13 @@ public class Shoot extends CommandGroup {
         double v = Math.sqrt(num);
         //v IS THE VELOCITY WE NEED TO SHOOT AT
         //THIS IS A COMMAND GORUP SO THAT YOU ARE ABLE TO ADD A SHOOT COMMAND USING v AS AN INPUT
-        if(ball2 && beam2.getValue() <= 100) {
+        if (ball2 && beam2.getValue() <= 100) {
             ball2 = false;
-          }else if(!ball2 && beam2.getValue() > 100) {
+        }
+        else if (!ball2 && beam2.getValue() > 100) {
             ball2 = true;
             Robot.ballcount--;
-          }
+        }
     }
 
    

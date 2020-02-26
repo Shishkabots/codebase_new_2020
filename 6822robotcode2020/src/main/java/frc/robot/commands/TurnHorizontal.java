@@ -28,7 +28,7 @@ public class TurnHorizontal extends Command {
     double maxVoltage = 0.40 + ff;
 
     public TurnHorizontal(int diffX) {
-        requires(Robot.m_drivetrain);
+        requires(Robot.m_drivetrain); // necessary to make sure DT isn't moved during align?
         requires(Robot.m_shooter);
         errorX = diffX;
     }

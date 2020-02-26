@@ -16,9 +16,9 @@ public class Turret extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
    
-    public static VictorSPX turner;
+    public static TalonSRX turner;
 
-    public Turret(VictorSPX b)
+    public Turret(TalonSRX b)
 	{
 
         turner = b;
