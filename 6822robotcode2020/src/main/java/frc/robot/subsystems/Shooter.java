@@ -26,6 +26,7 @@ public class Shooter extends Subsystem {
 	{
         lead = a;
         slave = b;
+        slave.setInverted(true);
         slave.follow(lead);
     }
 

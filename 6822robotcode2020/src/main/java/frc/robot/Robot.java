@@ -1241,12 +1241,13 @@ public class Robot extends TimedRobot {
     slave2 = new WPI_TalonFX(4); //done
 
     turret = new WPI_TalonSRX(5); // not done yet
-
     m_turret = new Turret(turret);
 
     m_drive = new DifferentialDrive(drive1, drive2);
     SmartDashboard.putData(m_drive);
     m_drivetrain = new DriveTrain();
+
+    m_shooter = new Shooter(shoot1, shoot2);
 
     beam1 = new AnalogInput(3);
     beam2 = new AnalogInput(4);
@@ -1296,7 +1297,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     cont++; 
     
-    //Scheduler.getInstance().run();
+    Scheduler.getInstance().run();
     
     /*System.out.println(arm1.getSelectedSensorPosition(0));
     if(Math.abs(arm1.getSelectedSensorPosition(0))<40000)
