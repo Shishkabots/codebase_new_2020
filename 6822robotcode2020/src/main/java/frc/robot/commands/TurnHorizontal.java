@@ -27,13 +27,14 @@ public class TurnHorizontal extends Command {
     double ff = 0.13;
     double maxVoltage = 0.40 + ff;
 
+    
+    Turret turret = Robot.m_turret;
+
     public TurnHorizontal(int diffX) {
         requires(Robot.m_drivetrain); // necessary to make sure DT isn't moved during align?
         requires(Robot.m_shooter);
         errorX = diffX;
     }
-
-    Turret turret = Robot.m_turret;
        
     protected void initialize() {
         turret.rotate(0);
@@ -52,7 +53,7 @@ public class TurnHorizontal extends Command {
             voltage = Math.signum(voltage) * maxVoltage;
             turret.rotate(voltage);
         }
-        SmartDashboard.putString("Am I aligning?", "yes");     
+        //SmartDashboard.putString("Am I aligning?", "yes");     
           
     }
 

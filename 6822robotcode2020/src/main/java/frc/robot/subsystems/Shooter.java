@@ -26,8 +26,10 @@ public class Shooter extends Subsystem {
 	{
         lead = a;
         slave = b;
-        slave.setInverted(true);
-        slave.follow(lead);
+        lead.setInverted(true);
+
+        // allowing the two to spin separately
+        //slave.follow(lead);
     }
 
     public void initDefaultCommand() {
@@ -35,9 +37,25 @@ public class Shooter extends Subsystem {
         SmartDashboard.putNumber("Shooter Voltage", 0);
      }
 
-     public void shoot(double voltageShoot) {
+    public void shoot(double voltageShoot) {
         SmartDashboard.putNumber("Shooter Voltage", voltageShoot);
         lead.set(ControlMode.PercentOutput, voltageShoot);
-     }
+        slave.set(ControlMode.PercentOutput, voltageShoot);
+    }
+
+    // spin separately, if desired (only allows one at a time, however)
+    public void shootLead(double voltageShoot) {
+        SmartDashboard.putNumber("Lead Shooter Voltage", voltageShoot);
+        lead.set(ControlMode.PercentOutput, voltageShoot);
+        slave.set(ControlMode.PercentOutput, 0);
+    }
+
+    public void shootSlave(double voltageShoot) {
+        SmartDashboard.putNumber("Slave Shooter Voltage", voltageShoot);
+        slave.set(ControlMode.PercentOutput, voltageShoot);
+        lead.set(ControlMode.PercentOutput, 0);
+    }
+
+    
 
 }
