@@ -111,6 +111,7 @@ public class Robot extends TimedRobot {
   public static Spark led;
   public static Mat img;
 
+  public static UsbCamera camera;
   //public static final AnalogInput m_ultrasonic0 = new AnalogInput(kUltrasonicPort0);
 
   
@@ -169,7 +170,7 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
 
     m_visionThread = new Thread(() -> {
-      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+      camera = CameraServer.getInstance().startAutomaticCapture();
       camera.setResolution(640, 480);
       cvSink = CameraServer.getInstance().getVideo();
       CvSource outputStream = CameraServer.getInstance().putVideo("Rectangle", 640, 480);

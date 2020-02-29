@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
+/*
 public class TurnHorizontal extends Command {
     double P = 0.02; // tune this
     double I = 0.0;
@@ -69,3 +70,5 @@ public class TurnHorizontal extends Command {
     	turret.rotate(0);
     }
 }
+*/
+// this is no longer necessary; we moved the PID into alignshooter.java
