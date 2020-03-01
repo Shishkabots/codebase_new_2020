@@ -22,7 +22,7 @@ import org.opencv.core.*;
 import java.util.ArrayList;
 
 public class AlignShooter extends CommandGroup {
-    public Mat img;
+    public Mat img = new Mat();
     public int errorx, errory;
 
     public double P = 0.02; // tune this
@@ -42,7 +42,7 @@ public class AlignShooter extends CommandGroup {
     public static double integral, previous_error, derivative = 0;
     public double dt = 0.02;
     public double ff = 0.041; // correct to these 2 significant digits, using the setup on 2/28/20
-    public double maxVoltage = 0.25 + ff; // conservative; would set the max around [0.4, 0.6]
+    public double maxVoltage = 0.15 + ff; // conservative; would set the max around [0.4, 0.6]
 
     public double threshold = 5; // pixel error required before stopping
 
@@ -92,12 +92,13 @@ public class AlignShooter extends CommandGroup {
                 derivative = (errorx - previous_error) / dt;
                 previous_error = errorx; //keep updating error to the most recently measured one
                 double voltage = (P * errorx + I * integral + D * derivative);
-                voltage += (errorx > 0 ? ff : -ff);
+                voltage += (voltage > 0 ? ff : -ff);
                 if (Math.abs(voltage) >= maxVoltage) {
                     voltage = Math.signum(voltage) * maxVoltage;
                 }
-                turret.rotate(voltage);
+                //Robot.m_turret.rotate(voltage); // must be Robot.m_turret, not the turret variable declared above
             }
+            Robot.m_turret.rotate(0.25);
         }
         else{
             if(numNoiseLoops >= noiseLoopThreshold){
@@ -114,7 +115,8 @@ public class AlignShooter extends CommandGroup {
     }
 
     protected void end() {
-        addSequential(new StopTurning());
+        Robot.m_turret.rotate(0);
+        //addSequential(new StopTurning());
         //addSequential(new Shoot(getDistMeter(), Robot.heightOuterPort));
     }
 
