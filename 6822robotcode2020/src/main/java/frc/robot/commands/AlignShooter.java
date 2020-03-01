@@ -1,6 +1,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.VisionHelper;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.cscore.UsbCamera;
@@ -29,6 +30,7 @@ public class AlignShooter extends CommandGroup {
     public double I = 0.0;
     public double D = 0.0003;
 
+    public VisionHelper visionHelper = new VisionHelper();
     // this is the number of loops to run the PID while there is no contour
     // detected, before we halt the PID. Each loop is 0.02s
     public int noiseLoopThreshold = 10;
@@ -118,6 +120,10 @@ public class AlignShooter extends CommandGroup {
 
     protected void end() {
         Robot.m_turret.rotate(0);
+        MatOfPoint visionTarget = VisionHelper.getLargestContour((MatOfPoint) img);
+        double distance = VisionHelper.averageVisionDistance(visionTarget);
+        double shooterSpeed = VisionHelper.getShooterSpeed(distance);
+        System.out.println("Done turning");
         //addSequential(new StopTurning());
         //addSequential(new Shoot(getDistMeter(), Robot.heightOuterPort));
     }
