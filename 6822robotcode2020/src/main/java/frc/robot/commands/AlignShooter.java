@@ -121,7 +121,7 @@ public class AlignShooter extends CommandGroup {
         MatOfPoint visionTarget = VisionHelper.getLargestContour((MatOfPoint) img);
         double distance = VisionHelper.averageVisionDistance(visionTarget);
         double shooterSpeed = VisionHelper.getShooterSpeed(distance);
-
+        System.out.println("Done turning");
         //addSequential(new StopTurning());
         //addSequential(new Shoot(getDistMeter(), Robot.heightOuterPort));
     }
