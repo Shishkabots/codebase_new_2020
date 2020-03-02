@@ -3,6 +3,7 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
@@ -32,19 +33,22 @@ public class VisionHelper {
     return centerCoor;
   }
 
-  public static MatOfPoint getLargestContour(MatOfPoint mat) {
+  public static MatOfPoint getLargestContour(Mat mat) {
     Robot.pipeline.process(mat);
     ArrayList<MatOfPoint> contours = Robot.pipeline.filterContoursOutput();
-    int index = 0;
-    int largestArea = 0;
-    for (int i = 0; i < contours.size(); i++) {
-      Rect boundingRect = Imgproc.boundingRect(contours.get(i));
-      if (boundingRect.width * boundingRect.height > largestArea) {
-        index = i;
-        largestArea = boundingRect.width * boundingRect.height;
+    if(contours.size()>0)
+      {int index = 0;
+      int largestArea = 0;
+      for (int i = 0; i < contours.size(); i++) {
+        Rect boundingRect = Imgproc.boundingRect(contours.get(i));
+        if (boundingRect.width * boundingRect.height > largestArea) {
+          index = i;
+          largestArea = boundingRect.width * boundingRect.height;
+        }
       }
+      return contours.get(index);
     }
-    return contours.get(index);
+    return null;
   }
 
   public static double visionDistanceWidth(MatOfPoint contour) {

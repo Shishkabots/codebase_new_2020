@@ -44,7 +44,7 @@ public class AlignShooter extends CommandGroup {
     public static double integral, previous_error, derivative = 0;
     public double dt = 0.02;
     public double ff = 0.041; // correct to these 2 significant digits, using the setup on 2/28/20
-    public double maxVoltage = 0.15 + ff; // conservative; would set the max around [0.4, 0.6]
+    public double maxVoltage = 0.30 + ff; // conservative; would set the max around [0.4, 0.6]
 
     public double threshold = 5; // pixel error required before stopping
 
@@ -69,39 +69,58 @@ public class AlignShooter extends CommandGroup {
     }
 
     public AlignShooter(Mat img) {
+        
         //this.img = img;
     }
 
     protected void initialize() {
-
+        numNoiseLoops = 0;
+        noiseHalt = false;
     }
 
     protected void execute() {
         SmartDashboard.putNumber("numContours", Robot.pipeline.filterContoursOutput().size());
+        System.out.println("This is running");
         if(Robot.cvSink.grabFrame(img) != 0)
         {
-            numNoiseLoops = 0;
+            Robot.pipeline.process(img);
+            if(Robot.pipeline.filterContoursOutput().size()>0)
+            {
+                numNoiseLoops = 0;
+                SmartDashboard.putNumber("numNoiseLoops", numNoiseLoops);
 
-            int[] center = findCenter(); // this is the center of the CONTOUR, not of the image
+                int[] center = findCenter(); // this is the center of the CONTOUR, not of the image
 
-            // if contour center is to the right, errorx > 0. Voltage will then be p    ositive,
-            // and the turret will turn right towards the target
-            errorx = center[0] - Robot.imgWidth / 2;
-            errory = center[1] - Robot.imgHeight / 2;
-            if (Math.abs(errorx) > 2) {
-                // The condition if error = 0 is being checked in visionController, thats why you dont need it here
-                // this turn vertical command is only being called when the condition ^ is false
-                integral += (errorx * dt); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
-                derivative = (errorx - previous_error) / dt;
-                previous_error = errorx; //keep updating error to the most recently measured one
-                double voltage = (P * errorx + I * integral + D * derivative);
-                voltage += (voltage > 0 ? ff : -ff);
-                if (Math.abs(voltage) >= maxVoltage) {
-                    voltage = Math.signum(voltage) * maxVoltage;
+                // if contour center is to the right, errorx > 0. Voltage will then be p    ositive,
+                // and the turret will turn right towards the target
+                errorx = center[0] - Robot.imgWidth / 2;
+                errory = center[1] - Robot.imgHeight / 2;
+                if (Math.abs(errorx) > 2) {
+                    // The condition if error = 0 is being checked in visionController, thats why you dont need it here
+                    // this turn vertical command is only being called when the condition ^ is false
+                    integral += (errorx * dt); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
+                    derivative = (errorx - previous_error) / dt;
+                    previous_error = errorx; //keep updating error to the most recently measured one
+                    double voltage = (P * errorx + I * integral + D * derivative);
+                    voltage += (voltage > 0 ? ff : -ff);
+                    if (Math.abs(voltage) >= maxVoltage) {
+                        voltage = Math.signum(voltage) * maxVoltage;
+                    }
+                    
+                    SmartDashboard.putNumber("turretVoltage", voltage);
+                    SmartDashboard.putNumber("errorx", errorx);
+                    SmartDashboard.putNumber("numNoiseLoops", numNoiseLoops);
+                    Robot.m_turret.rotate(voltage); // must be Robot.m_turret, not the turret variable declared above
                 }
-                
-                SmartDashboard.putNumber("turretVoltage", voltage);
-                Robot.m_turret.rotate(voltage); // must be Robot.m_turret, not the turret variable declared above
+            }
+            else{
+                if(numNoiseLoops >= noiseLoopThreshold){
+                    noiseHalt = true;
+                }
+                else{
+                    numNoiseLoops++;
+                    SmartDashboard.putNumber("numNoiseLoops", numNoiseLoops);
+                }
             }
         }
         else{
@@ -110,6 +129,7 @@ public class AlignShooter extends CommandGroup {
             }
             else{
                 numNoiseLoops++;
+                SmartDashboard.putNumber("numNoiseLoops", numNoiseLoops);
             }
         }
     }
@@ -120,9 +140,12 @@ public class AlignShooter extends CommandGroup {
 
     protected void end() {
         Robot.m_turret.rotate(0);
-        MatOfPoint visionTarget = VisionHelper.getLargestContour((MatOfPoint) img);
-        double distance = VisionHelper.averageVisionDistance(visionTarget);
-        double shooterSpeed = VisionHelper.getShooterSpeed(distance);
+        MatOfPoint visionTarget = VisionHelper.getLargestContour(img);
+        if(visionTarget != null)
+        {
+            double distance = VisionHelper.averageVisionDistance(visionTarget);
+            double shooterSpeed = VisionHelper.getShooterSpeed(distance);
+        }
         System.out.println("Done turning");
         //addSequential(new StopTurning());
         //addSequential(new Shoot(getDistMeter(), Robot.heightOuterPort));
