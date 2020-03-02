@@ -104,7 +104,7 @@ public class AlignShooter extends CommandGroup {
                 // and the turret will turn right towards the target
                 errorx = center[0] - Robot.imgWidth / 2;
                 errory = center[1] - Robot.imgHeight / 2;
-                if (Math.abs(errorx) > 2) {
+                if (Math.abs(errorx) > threshold) {
                     // The condition if error = 0 is being checked in visionController, thats why you dont need it here
                     // this turn vertical command is only being called when the condition ^ is false
                     integral += (errorx * dt); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
