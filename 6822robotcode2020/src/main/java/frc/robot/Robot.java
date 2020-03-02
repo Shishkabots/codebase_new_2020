@@ -204,6 +204,8 @@ public class Robot extends TimedRobot {
 
     shoot1.configPeakCurrentLimit(60);
     shoot1.configContinuousCurrentLimit(28);
+    shoot1.setNeutralMode(NeutralMode.Coast);
+    shoot2.setNeutralMode(NeutralMode.Coast);
 
     drive1 = new WPI_TalonFX(1); //done
     slave1 = new WPI_TalonFX(2); //done
@@ -267,7 +269,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     cont++; 
     
-    Scheduler.getInstance().run();
+    //Scheduler.getInstance().run();
     
     /*System.out.println(arm1.getSelectedSensorPosition(0));
     if(Math.abs(arm1.getSelectedSensorPosition(0))<40000)
@@ -284,10 +286,10 @@ public class Robot extends TimedRobot {
     }*/
 
     //arm1.set(-0.075);
-    //shoot1.set(0.5);
-    //shoot2.set(-0.5);
+    //shoot1.set(1);
+    shoot2.set(1);
     
-    //System.out.println(encoder.getRate());
+    System.out.println(encoder.getRate());
 
 
     /*if(cont>150)
