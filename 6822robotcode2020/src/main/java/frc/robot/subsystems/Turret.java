@@ -20,19 +20,17 @@ public class Turret extends Subsystem {
 
     public Turret(TalonSRX b)
 	{
-
-        turner = b;
-        
+        turner = b;   
     }
 
     public void initDefaultCommand() {
         //setDefaultCommand(new DriveTrainControl());
-        SmartDashboard.putNumber("Turret Voltage", 0);
+        SmartDashboard.putNumber("Turret Turning Voltage", 0);
         
-     }
+    }
 
      public void rotate(double voltage) {
-        SmartDashboard.putNumber("Turret turning voltage", voltage);
+        SmartDashboard.putNumber("Turret Turning Voltage", voltage);
         turner.set(ControlMode.PercentOutput, voltage);
      }
 }

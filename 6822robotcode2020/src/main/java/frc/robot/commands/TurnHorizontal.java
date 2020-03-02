@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
+/*
 public class TurnHorizontal extends Command {
     double P = 0.02; // tune this
     double I = 0.0;
@@ -27,13 +28,14 @@ public class TurnHorizontal extends Command {
     double ff = 0.13;
     double maxVoltage = 0.40 + ff;
 
+    
+    Turret turret = Robot.m_turret;
+
     public TurnHorizontal(int diffX) {
         requires(Robot.m_drivetrain); // necessary to make sure DT isn't moved during align?
         requires(Robot.m_shooter);
         errorX = diffX;
     }
-
-    Turret turret = Robot.m_turret;
        
     protected void initialize() {
         turret.rotate(0);
@@ -52,7 +54,7 @@ public class TurnHorizontal extends Command {
             voltage = Math.signum(voltage) * maxVoltage;
             turret.rotate(voltage);
         }
-        SmartDashboard.putString("Am I aligning?", "yes");     
+        //SmartDashboard.putString("Am I aligning?", "yes");     
           
     }
 
@@ -68,3 +70,5 @@ public class TurnHorizontal extends Command {
     	turret.rotate(0);
     }
 }
+*/
+// this is no longer necessary; we moved the PID into alignshooter.java

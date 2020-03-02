@@ -26,8 +26,21 @@ public class ManualShooter extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double voltageAxis = Robot.m_oi.controllerTwo.getRawAxis(1);
-    Robot.m_shooter.shoot(voltageAxis);
+    double leadAxis = Robot.m_oi.controllerTwo.getRawAxis(1);
+    double slaveAxis = Robot.m_oi.controllerTwo.getRawAxis(0);
+
+    // don't want the two motors to stall against each other; only let the higher voltage one spin
+    // tried disabling one if they are in opposite direction, but this doesn't seem to work well
+    if (Math.abs(leadAxis) > Math.abs(slaveAxis)) {
+      Robot.m_shooter.shootLead(leadAxis);
+    }
+    else {
+      Robot.m_shooter.shootSlave(slaveAxis);
+    }
+    
+
+    // double voltageAxis = Robot.m_oi.controllerTwo.getRawAxis(1);
+    // Robot.m_shooter.shoot(voltageAxis);
   }
 
   // Make this return true when this Command no longer needs to run execute()

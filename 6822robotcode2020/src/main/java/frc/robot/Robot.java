@@ -111,6 +111,7 @@ public class Robot extends TimedRobot {
   public static Spark led;
   public static Mat img;
 
+  public static UsbCamera camera;
   //public static final AnalogInput m_ultrasonic0 = new AnalogInput(kUltrasonicPort0);
 
   
@@ -169,7 +170,7 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
 
     m_visionThread = new Thread(() -> {
-      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+      camera = CameraServer.getInstance().startAutomaticCapture();
       camera.setResolution(640, 480);
       cvSink = CameraServer.getInstance().getVideo();
       CvSource outputStream = CameraServer.getInstance().putVideo("Rectangle", 640, 480);
@@ -285,11 +286,24 @@ public class Robot extends TimedRobot {
       arm1.set(0);
     }*/
 
+<<<<<<< HEAD
     //arm1.set(-0.075);
     //shoot1.set(1);
     shoot2.set(1);
     
     System.out.println(encoder.getRate());
+=======
+    //turret.set(-0.075);
+    //shoot1.set(0.5); // 90k ticks, around 1320 rpm
+    //shoot2.set(-0.5); // 40k ticks, around 590 rpm
+
+    //shoot1.set(1); // 180k ticks, around 2640 rpm
+    //shoot2.set(-1); // 78k ticks, around 1140 rpm
+    
+    //shoot1.set(1);
+    //shoot2.set(1);
+    //System.out.println(encoder.getRate()); 
+>>>>>>> c2799a19a044c1563c31db682253572b65cf8e7f
 
 
     /*if(cont>150)
