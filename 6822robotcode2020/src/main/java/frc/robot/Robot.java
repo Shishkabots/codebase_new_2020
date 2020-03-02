@@ -97,10 +97,10 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static Thread m_visionThread;
   public static CvSink cvSink;
-
+  public static CvSource outputStream;
   public static GripPipeline pipeline;
-  public static final int imgWidth = 640;
-  public static final int imgHeight = 480;
+  public static final int imgWidth = 320;
+  public static final int imgHeight = 240;
 
   //public static final int kUltrasonicPort0 = 0;
   //public static final int kUltrasonicPort1 = 1;
@@ -171,14 +171,21 @@ public class Robot extends TimedRobot {
 
     m_visionThread = new Thread(() -> {
       camera = CameraServer.getInstance().startAutomaticCapture();
-      camera.setResolution(640, 480);
+      camera.setResolution(imgWidth, imgHeight);
       cvSink = CameraServer.getInstance().getVideo();
-      CvSource outputStream = CameraServer.getInstance().putVideo("Rectangle", 640, 480);
+      outputStream = CameraServer.getInstance().putVideo("Rectangle", imgWidth, imgHeight);
       img = new Mat();
       while (!Thread.interrupted()) {
         if (cvSink.grabFrame(img) == 0) {
           outputStream.notifyError(cvSink.getError());
           continue;
+        }
+        pipeline.process(img);
+        ArrayList<MatOfPoint> contours  = pipeline.filterContoursOutput();
+        
+        for(int i=0;i<contours.size();i++)
+        {
+          Imgproc.drawContours(img, contours,i, new Scalar(0,0,255),5);
         }
         outputStream.putFrame(img);
       }
@@ -269,8 +276,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     cont++; 
-    
-    //Scheduler.getInstance().run();
+    //System.out.println("teleop running");
+    Scheduler.getInstance().run();
     
     /*System.out.println(arm1.getSelectedSensorPosition(0));
     if(Math.abs(arm1.getSelectedSensorPosition(0))<40000)
@@ -286,13 +293,6 @@ public class Robot extends TimedRobot {
       arm1.set(0);
     }*/
 
-<<<<<<< HEAD
-    //arm1.set(-0.075);
-    //shoot1.set(1);
-    shoot2.set(1);
-    
-    System.out.println(encoder.getRate());
-=======
     //turret.set(-0.075);
     //shoot1.set(0.5); // 90k ticks, around 1320 rpm
     //shoot2.set(-0.5); // 40k ticks, around 590 rpm
@@ -303,7 +303,6 @@ public class Robot extends TimedRobot {
     //shoot1.set(1);
     //shoot2.set(1);
     //System.out.println(encoder.getRate()); 
->>>>>>> c2799a19a044c1563c31db682253572b65cf8e7f
 
 
     /*if(cont>150)

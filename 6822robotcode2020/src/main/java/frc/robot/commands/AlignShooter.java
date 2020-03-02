@@ -30,7 +30,6 @@ public class AlignShooter extends CommandGroup {
     public double I = 0.0;
     public double D = 0.0003;
 
-    public VisionHelper visionHelper = new VisionHelper();
     // this is the number of loops to run the PID while there is no contour
     // detected, before we halt the PID. Each loop is 0.02s
     public int noiseLoopThreshold = 10;
@@ -50,14 +49,13 @@ public class AlignShooter extends CommandGroup {
 
     public Turret turret = Robot.m_turret;
 
-    public int[] findCenter() {
+    public int[] findCenter(MatOfPoint contour) {
         // [x,y]
-        int[] centerCoor = { -1, -1 };
-
-        Robot.pipeline.process(img);
-        ArrayList<MatOfPoint> contours = Robot.pipeline.filterContoursOutput();
-        if (contours.size() == 1) {
-            Rect boundingRect = Imgproc.boundingRect(contours.get(0));
+        int[] centerCoor = null;
+        if(contour!= null)
+        {
+            centerCoor = new int[2];
+            Rect boundingRect = Imgproc.boundingRect(contour);
 
             // centerCoor[0] grabs the centerX of the boundingRect
             // centerCoor[0] grabs the topY of the boundingRect, since we want this
@@ -76,20 +74,31 @@ public class AlignShooter extends CommandGroup {
     protected void initialize() {
         numNoiseLoops = 0;
         noiseHalt = false;
+        System.out.println("began turning");
     }
 
     protected void execute() {
         SmartDashboard.putNumber("numContours", Robot.pipeline.filterContoursOutput().size());
-        System.out.println("This is running");
-        if(Robot.cvSink.grabFrame(img) != 0)
+        //System.out.println("This is running");
+        if (Robot.cvSink.grabFrame(img) == 0) {
+            Robot.outputStream.notifyError(Robot.cvSink.getError());
+            if(numNoiseLoops >= noiseLoopThreshold){
+                noiseHalt = true;
+            }
+            else{
+                numNoiseLoops++;
+                SmartDashboard.putNumber("numNoiseLoops", numNoiseLoops);
+            }
+        }
+        else  
         {
-            Robot.pipeline.process(img);
-            if(Robot.pipeline.filterContoursOutput().size()>0)
+            MatOfPoint contour = VisionHelper.getLargestContour(img);
+            if(contour != null)
             {
                 numNoiseLoops = 0;
                 SmartDashboard.putNumber("numNoiseLoops", numNoiseLoops);
 
-                int[] center = findCenter(); // this is the center of the CONTOUR, not of the image
+                int[] center = findCenter(contour); // this is the center of the CONTOUR, not of the image
 
                 // if contour center is to the right, errorx > 0. Voltage will then be p    ositive,
                 // and the turret will turn right towards the target
@@ -121,15 +130,6 @@ public class AlignShooter extends CommandGroup {
                     numNoiseLoops++;
                     SmartDashboard.putNumber("numNoiseLoops", numNoiseLoops);
                 }
-            }
-        }
-        else{
-            if(numNoiseLoops >= noiseLoopThreshold){
-                noiseHalt = true;
-            }
-            else{
-                numNoiseLoops++;
-                SmartDashboard.putNumber("numNoiseLoops", numNoiseLoops);
             }
         }
     }
