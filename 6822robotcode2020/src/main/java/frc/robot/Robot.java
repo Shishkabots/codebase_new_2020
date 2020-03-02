@@ -286,13 +286,6 @@ public class Robot extends TimedRobot {
       arm1.set(0);
     }*/
 
-<<<<<<< HEAD
-    //arm1.set(-0.075);
-    //shoot1.set(1);
-    shoot2.set(1);
-    
-    System.out.println(encoder.getRate());
-=======
     //turret.set(-0.075);
     //shoot1.set(0.5); // 90k ticks, around 1320 rpm
     //shoot2.set(-0.5); // 40k ticks, around 590 rpm
@@ -303,7 +296,6 @@ public class Robot extends TimedRobot {
     //shoot1.set(1);
     //shoot2.set(1);
     //System.out.println(encoder.getRate()); 
->>>>>>> c2799a19a044c1563c31db682253572b65cf8e7f
 
 
     /*if(cont>150)
