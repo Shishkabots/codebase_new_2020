@@ -182,14 +182,22 @@ public class Robot extends TimedRobot {
         }
         pipeline.process(img);
         ArrayList<MatOfPoint> contours  = pipeline.filterContoursOutput();
-        
-        for(int i=0;i<contours.size();i++)
-        {
-          Imgproc.drawContours(img, contours,i, new Scalar(0,0,255),5);
+        int index = 0;
+        int largestArea = 0;
+        for (int i = 0; i < contours.size(); i++) {
+            Rect boundingRect = Imgproc.boundingRect(contours.get(i));
+            if (boundingRect.width * boundingRect.height > largestArea) {
+                index = i;
+                largestArea = boundingRect.width * boundingRect.height;
+            }
         }
+        Imgproc.drawContours(img, contours,index, new Scalar(0,0,255),5);
         outputStream.putFrame(img);
       }
-
+      if(Thread.interrupted())
+      {
+        System.out.println("Vision Crashed");
+      }
       
     });
     m_visionThread.setDaemon(true);

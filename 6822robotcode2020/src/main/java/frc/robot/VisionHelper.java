@@ -77,7 +77,7 @@ public class VisionHelper {
 
   public static double averageVisionDistance(MatOfPoint contour) {
     double measuredDistance = (visionDistanceHeight(contour) + visionDistanceWidth(contour)) / 2.0;
-    return  measuredDistance - (-0.11626697954008355 * measuredDistance + 27.101836829039314);
+    return  Math.sqrt(Math.pow(measuredDistance - (-0.11626697954008355 * measuredDistance + 27.101836829039314),2)+1.5*1.5);
   }
 
   public static void initializeDistanceTable() {

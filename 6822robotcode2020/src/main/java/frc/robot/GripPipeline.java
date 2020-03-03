@@ -44,7 +44,7 @@ public class GripPipeline implements VisionPipeline {
 		// Step HSL_Threshold0:
 		Mat hslThresholdInput = source0;
 		double[] hslThresholdHue = {65, 150};
-		double[] hslThresholdSaturation = {200, 255.0};
+		double[] hslThresholdSaturation = {215, 255.0};
 		double[] hslThresholdLuminance = {225, 255.0};
 		hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation, hslThresholdLuminance, hslThresholdOutput);
 
@@ -52,7 +52,7 @@ public class GripPipeline implements VisionPipeline {
 		Mat cvDilateSrc = hslThresholdOutput;
 		Mat cvDilateKernel = new Mat();
 		Point cvDilateAnchor = new Point(-1, -1);
-		double cvDilateIterations = 5.0;
+		double cvDilateIterations = 4.5;
 		int cvDilateBordertype = Core.BORDER_CONSTANT;
 		Scalar cvDilateBordervalue = new Scalar(-1);
 		cvDilate(cvDilateSrc, cvDilateKernel, cvDilateAnchor, cvDilateIterations, cvDilateBordertype, cvDilateBordervalue, cvDilateOutput);
@@ -61,7 +61,7 @@ public class GripPipeline implements VisionPipeline {
 		Mat cvErodeSrc = cvDilateOutput;
 		Mat cvErodeKernel = new Mat();
 		Point cvErodeAnchor = new Point(-1, -1);
-		double cvErodeIterations = 3.2;
+		double cvErodeIterations = 2.7;
 		int cvErodeBordertype = Core.BORDER_CONSTANT;
 		Scalar cvErodeBordervalue = new Scalar(-1);
 		cvErode(cvErodeSrc, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBordertype, cvErodeBordervalue, cvErodeOutput);
@@ -79,7 +79,7 @@ public class GripPipeline implements VisionPipeline {
 		double filterContoursMaxWidth = 1.0E7;
 		double filterContoursMinHeight = 0.0;
 		double filterContoursMaxHeight = 1.0E7;
-		double[] filterContoursSolidity = {12.5, 42.0};
+		double[] filterContoursSolidity = {14.0, 40};
 		double filterContoursMaxVertices = 675;
 		double filterContoursMinVertices = 4.0;
 		double filterContoursMinRatio = 0.6;
@@ -212,6 +212,8 @@ public class GripPipeline implements VisionPipeline {
 			mode = Imgproc.RETR_LIST;
 		}
 		int method = Imgproc.CHAIN_APPROX_SIMPLE;
+		//System.out.println(input.getClass().getName());
+		//System.out.println(mode);
 		Imgproc.findContours(input, contours, hierarchy, mode, method);
 	}
 

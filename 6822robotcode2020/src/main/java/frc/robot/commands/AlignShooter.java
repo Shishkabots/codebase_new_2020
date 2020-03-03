@@ -23,10 +23,10 @@ import org.opencv.core.*;
 import java.util.ArrayList;
 
 public class AlignShooter extends CommandGroup {
-    public Mat img = new Mat();
+    public Mat img = new Mat(), prevImg = new Mat();
     public int errorx, errory;
 
-    public double P = 0.02; // tune this
+    public double P = 0.01; // tune this
     public double I = 0.0;
     public double D = 0.0003;
 
@@ -43,7 +43,7 @@ public class AlignShooter extends CommandGroup {
     public static double integral, previous_error, derivative = 0;
     public double dt = 0.02;
     public double ff = 0.041; // correct to these 2 significant digits, using the setup on 2/28/20
-    public double maxVoltage = 0.30 + ff; // conservative; would set the max around [0.4, 0.6]
+    public double maxVoltage = 0.1 + ff; // conservative; would set the max around [0.4, 0.6]
 
     public double threshold = 5; // pixel error required before stopping
 
@@ -66,7 +66,7 @@ public class AlignShooter extends CommandGroup {
         return centerCoor;
     }
 
-    public AlignShooter(Mat img) {
+    public AlignShooter() {
         
         //this.img = img;
     }
@@ -80,8 +80,9 @@ public class AlignShooter extends CommandGroup {
     protected void execute() {
         SmartDashboard.putNumber("numContours", Robot.pipeline.filterContoursOutput().size());
         //System.out.println("This is running");
-        if (Robot.cvSink.grabFrame(img) == 0) {
-            Robot.outputStream.notifyError(Robot.cvSink.getError());
+        img = Robot.img.clone();
+        if (img.equals(prevImg)) {
+            //Robot.outputStream.notifyError(Robot.cvSink.getError());
             if(numNoiseLoops >= noiseLoopThreshold){
                 noiseHalt = true;
             }
@@ -92,7 +93,23 @@ public class AlignShooter extends CommandGroup {
         }
         else  
         {
-            MatOfPoint contour = VisionHelper.getLargestContour(img);
+            prevImg = img;
+            //MatOfPoint contour = VisionHelper.getLargestContour(img);
+            ArrayList<MatOfPoint> contours = (ArrayList<MatOfPoint>) Robot.pipeline.filterContoursOutput().clone();
+            MatOfPoint contour = null;
+            if(contours.size()>0)
+            {
+                int index = 0;
+                int largestArea = 0;
+                for (int i = 0; i < contours.size(); i++) {
+                    Rect boundingRect = Imgproc.boundingRect(contours.get(i));
+                    if (boundingRect.width * boundingRect.height > largestArea) {
+                        index = i;
+                        largestArea = boundingRect.width * boundingRect.height;
+                    }
+                    contour = contours.get(index);
+                }
+            }
             if(contour != null)
             {
                 numNoiseLoops = 0;
@@ -139,14 +156,15 @@ public class AlignShooter extends CommandGroup {
     }
 
     protected void end() {
-        Robot.m_turret.rotate(0);
+        /*Robot.m_turret.rotate(0);
         MatOfPoint visionTarget = VisionHelper.getLargestContour(img);
         if(visionTarget != null)
         {
             double distance = VisionHelper.averageVisionDistance(visionTarget);
             double shooterSpeed = VisionHelper.getShooterSpeed(distance);
         }
-        System.out.println("Done turning");
+        System.out.println("Done turning");*/
+
         //addSequential(new StopTurning());
         //addSequential(new Shoot(getDistMeter(), Robot.heightOuterPort));
     }
