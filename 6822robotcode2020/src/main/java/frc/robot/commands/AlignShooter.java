@@ -32,7 +32,7 @@ public class AlignShooter extends CommandGroup {
 
     // this is the number of loops to run the PID while there is no contour
     // detected, before we halt the PID. Each loop is 0.02s
-    public int noiseLoopThreshold = 10;
+    public int noiseLoopThreshold = 15;
     public int numNoiseLoops = 0; // a "noise loop" is a loop during which there's no contour detected
     public boolean noiseHalt = false;
 
@@ -42,8 +42,8 @@ public class AlignShooter extends CommandGroup {
 
     public static double integral, previous_error, derivative = 0;
     public double dt = 0.02;
-    public double ff = 0.041; // correct to these 2 significant digits, using the setup on 2/28/20
-    public double maxVoltage = 0.1 + ff; // conservative; would set the max around [0.4, 0.6]
+    public double ff = 0.02; // correct to these 2 significant digits, using the setup on 2/28/20
+    public double maxVoltage = 0.08 + ff; // conservative; would set the max around [0.4, 0.6]
 
     public double threshold = 5; // pixel error required before stopping
 

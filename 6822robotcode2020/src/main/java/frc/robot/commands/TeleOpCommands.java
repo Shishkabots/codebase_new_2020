@@ -9,8 +9,8 @@ public class TeleOpCommands extends CommandGroup {
 
     public static DriveTrainControl drive;
     public TeleOpCommands() {
-        addParallel(new DriveTrainControl());
-        //addParallel(new TurnTurret());
-        //addParallel(new ManualShooter());
+        //addParallel(new DriveTrainControl());
+        addParallel(new TurnTurret());
+        addParallel(new ManualShooter());
     }
 }

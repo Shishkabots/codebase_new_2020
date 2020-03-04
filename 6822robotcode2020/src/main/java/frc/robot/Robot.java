@@ -182,7 +182,7 @@ public class Robot extends TimedRobot {
         }
         pipeline.process(img);
         ArrayList<MatOfPoint> contours  = pipeline.filterContoursOutput();
-        int index = 0;
+        /*int index = 0;
         int largestArea = 0;
         for (int i = 0; i < contours.size(); i++) {
             Rect boundingRect = Imgproc.boundingRect(contours.get(i));
@@ -191,7 +191,11 @@ public class Robot extends TimedRobot {
                 largestArea = boundingRect.width * boundingRect.height;
             }
         }
-        Imgproc.drawContours(img, contours,index, new Scalar(0,0,255),5);
+        Imgproc.drawContours(img, contours,index, new Scalar(0,0,255),3);*/
+        for(int i=0;i<contours.size();i++)
+        {
+          Imgproc.drawContours(img, contours,i, new Scalar(0,0,255),3);
+        }
         outputStream.putFrame(img);
       }
       if(Thread.interrupted())
