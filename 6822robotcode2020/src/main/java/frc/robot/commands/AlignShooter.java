@@ -115,9 +115,11 @@ public class AlignShooter extends CommandGroup {
                 numNoiseLoops = 0;
                 SmartDashboard.putNumber("numNoiseLoops", numNoiseLoops);
 
-                int[] center = findCenter(contour); // this is the center of the CONTOUR, not of the image
+                // this is the "center" of the CONTOUR, not of the image
+                // it's also not actually the center, as the x is the center, but y is the top
+                int[] center = findCenter(contour); 
 
-                // if contour center is to the right, errorx > 0. Voltage will then be p    ositive,
+                // if contour center is to the right, errorx > 0. Voltage will then be positive,
                 // and the turret will turn right towards the target
                 errorx = center[0] - Robot.imgWidth / 2;
                 errory = center[1] - Robot.imgHeight / 2;
