@@ -3,6 +3,7 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import org.opencv.core.CvException;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
@@ -34,19 +35,25 @@ public class VisionHelper {
   }
 
   public static MatOfPoint getLargestContour(Mat mat) {
-    Robot.pipeline.process(mat);
-    ArrayList<MatOfPoint> contours = Robot.pipeline.filterContoursOutput();
-    if(contours.size()>0)
-      {int index = 0;
-      int largestArea = 0;
-      for (int i = 0; i < contours.size(); i++) {
-        Rect boundingRect = Imgproc.boundingRect(contours.get(i));
-        if (boundingRect.width * boundingRect.height > largestArea) {
-          index = i;
-          largestArea = boundingRect.width * boundingRect.height;
+    try{
+      Robot.pipeline.process(mat);
+      ArrayList<MatOfPoint> contours = Robot.pipeline.filterContoursOutput();
+      if(contours.size()>0)
+        {int index = 0;
+        int largestArea = 0;
+        for (int i = 0; i < contours.size(); i++) {
+          Rect boundingRect = Imgproc.boundingRect(contours.get(i));
+          if (boundingRect.width * boundingRect.height > largestArea) {
+            index = i;
+            largestArea = boundingRect.width * boundingRect.height;
+          }
         }
+        return contours.get(index);
       }
-      return contours.get(index);
+    }
+    catch(CvException e)
+    {
+      System.out.println("fail");
     }
     return null;
   }
@@ -70,7 +77,7 @@ public class VisionHelper {
 
   public static double averageVisionDistance(MatOfPoint contour) {
     double measuredDistance = (visionDistanceHeight(contour) + visionDistanceWidth(contour)) / 2.0;
-    return  measuredDistance - (-0.11626697954008355 * measuredDistance + 27.101836829039314);
+    return  Math.sqrt(Math.pow(measuredDistance - (-0.11626697954008355 * measuredDistance + 27.101836829039314),2)+1.5*1.5);
   }
 
   public static void initializeDistanceTable() {

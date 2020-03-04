@@ -18,10 +18,9 @@ public class Shoot extends CommandGroup {
     double u;
     AnalogInput beam2 = Robot.beam2;
     boolean ball2 = true;
-    public Shoot(double a, double b) {
+    public Shoot() {
         //a AND b ARE THE HORIZONTAL AND VERTICAL TARGET DISTANCES RESPECTIVELY
-        this.d = a;
-        this.u = b;
+        
     }
     //SET Robot.theta FROM Robot.java DEPENDING ON FINAL DESIGN
    double theta = Robot.theta;
