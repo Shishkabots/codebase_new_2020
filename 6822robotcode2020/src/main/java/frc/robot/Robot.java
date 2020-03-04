@@ -182,19 +182,27 @@ public class Robot extends TimedRobot {
         }
         pipeline.process(img);
         ArrayList<MatOfPoint> contours  = pipeline.filterContoursOutput();
-        /*int index = 0;
-        int largestArea = 0;
-        for (int i = 0; i < contours.size(); i++) {
-            Rect boundingRect = Imgproc.boundingRect(contours.get(i));
-            if (boundingRect.width * boundingRect.height > largestArea) {
-                index = i;
-                largestArea = boundingRect.width * boundingRect.height;
-            }
-        }
-        Imgproc.drawContours(img, contours,index, new Scalar(0,0,255),3);*/
-        for(int i=0;i<contours.size();i++)
+        if(contours.size()>0)
         {
-          Imgproc.drawContours(img, contours,i, new Scalar(0,0,255),3);
+          int index = 0;
+          int largestArea = 0;
+          for (int i = 0; i < contours.size(); i++) {
+              Rect boundingRect = Imgproc.boundingRect(contours.get(i));
+              if (boundingRect.width * boundingRect.height > largestArea) {
+                  index = i;
+                  largestArea = boundingRect.width * boundingRect.height;
+              }
+          }
+          Imgproc.drawContours(img, contours,index, new Scalar(0,0,255),3);
+          /*for(int i=0;i<contours.size();i++)
+          {
+            Imgproc.drawContours(img, contours,i, new Scalar(0,0,255),3);
+          }*/
+          SmartDashboard.putNumber("Width Dist", VisionHelper.visionDistanceWidth(contours.get(index)));
+          SmartDashboard.putNumber("Height Dist", VisionHelper.visionDistanceHeight(contours.get(index)));
+          SmartDashboard.putNumber("Distance", VisionHelper.averageVisionDistance(contours.get(index)));
+          double distInMeters = VisionHelper.averageVisionDistance(contours.get(index))/100.0;
+          SmartDashboard.putNumber("Shooter Speed", VisionHelper.getShooterSpeed(distInMeters));
         }
         outputStream.putFrame(img);
       }
