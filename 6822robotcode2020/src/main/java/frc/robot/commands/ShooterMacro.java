@@ -17,10 +17,6 @@ public class ShooterMacro extends CommandGroup {
   public ShooterMacro() {
     addSequential(new AlignShooter());
     // need to calculate the distance
-<<<<<<< HEAD
-    // addSequential(new Shoot(1,1));
-=======
-    addSequential(new Shoot());
->>>>>>> 8ad9c56c07677594d0a12c77270ef1321636dc3f
+    //addSequential(new Shoot());
   }
 }

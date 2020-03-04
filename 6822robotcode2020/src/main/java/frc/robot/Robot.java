@@ -191,7 +191,7 @@ public class Robot extends TimedRobot {
                 largestArea = boundingRect.width * boundingRect.height;
             }
         }
-        Imgproc.drawContours(img, contours,index, new Scalar(0,0,255),5);
+        Imgproc.drawContours(img, contours,index, new Scalar(0,0,255),3);
         outputStream.putFrame(img);
       }
       if(Thread.interrupted())
