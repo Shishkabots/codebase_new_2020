@@ -169,6 +169,8 @@ public class Robot extends TimedRobot {
 
     m_oi = new OI();
 
+    VisionHelper.initializeDistanceTable();
+
     m_visionThread = new Thread(() -> {
       camera = CameraServer.getInstance().startAutomaticCapture();
       camera.setResolution(imgWidth, imgHeight);
@@ -225,7 +227,6 @@ public class Robot extends TimedRobot {
     arm1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     arm1.setSelectedSensorPosition(0);
     arm2 = new WPI_VictorSPX(11); // done
-    arm1.setSelectedSensorPosition(0);
 
     shoot1 = new WPI_TalonSRX(6); //done
     shoot2 = new WPI_VictorSPX(7); // done
@@ -239,6 +240,11 @@ public class Robot extends TimedRobot {
     slave1 = new WPI_TalonFX(2); //done
     drive2 = new WPI_TalonFX(3); // done
     slave2 = new WPI_TalonFX(4); //done
+
+    drive1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    drive2.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    drive1.setSelectedSensorPosition(0);
+    drive2.setSelectedSensorPosition(0);
 
     turret = new WPI_TalonSRX(5); // not done yet
     m_turret = new Turret(turret);
