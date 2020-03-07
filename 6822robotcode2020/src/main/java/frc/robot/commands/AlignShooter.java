@@ -80,7 +80,7 @@ public class AlignShooter extends CommandGroup {
     protected void execute() {
         SmartDashboard.putNumber("numContours", Robot.pipeline.filterContoursOutput().size());
         //System.out.println("This is running");
-        img = Robot.img.clone();
+        Robot.img.copyTo(img);
         if (img.equals(prevImg)) {
             //Robot.outputStream.notifyError(Robot.cvSink.getError());
             if(numNoiseLoops >= noiseLoopThreshold){
