@@ -95,6 +95,7 @@ public class Robot extends TimedRobot {
   public static DoubleSolenoid solenoid = new DoubleSolenoid(4, 3);
   //public static DoubleSolenoid rightSide = new DoubleSolenoid(4,5);
 
+  public static boolean ext = true;
   public static OI m_oi;
   public static Thread m_visionThread;
   public static CvSink cvSink;

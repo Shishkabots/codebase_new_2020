@@ -1111,7 +1111,7 @@ public class VisionHelper {
     if (distances.containsKey(distance)) {
       return distances.get(distance);
     } else if (distance > 1.0 && distance < 11.0) {
-      System.out.println(distance);
+      //System.out.println(distance);
       double lowKey = distances.floorKey(distance);
       double highKey = distances.ceilingKey(distance);
       return (distances.get(lowKey) + distances.get(highKey)) / 2;
