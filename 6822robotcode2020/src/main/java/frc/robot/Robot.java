@@ -10,6 +10,7 @@ package frc.robot;
 import java.util.*;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -112,6 +113,8 @@ public class Robot extends TimedRobot {
   public static Mat img;
 
   public static UsbCamera camera;
+  public static NetworkTableInstance networkTable = NetworkTableInstance.getDefault();
+  public static edu.wpi.first.networktables.NetworkTable nTable;
   //public static final AnalogInput m_ultrasonic0 = new AnalogInput(kUltrasonicPort0);
 
   
@@ -155,6 +158,8 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void robotInit() {
+    networkTable.startServer();
+    nTable = networkTable.getTable("nTable");
     encoder = new Encoder(0, 1);
     encoder.reset();
     //leftSide.set(DoubleSolenoid.Value.kForward);
@@ -165,6 +170,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
     AnalogInput.setGlobalSampleRate(100.0);
     //SmartDashboard.putNumber("Ultrasonic Sensor 0", 5.0 * m_ultrasonic0.getVoltage() / mvPer5mm);
+
+    
     pipeline = new GripPipeline();
 
     m_oi = new OI();
@@ -182,8 +189,6 @@ public class Robot extends TimedRobot {
         }
         outputStream.putFrame(img);
       }
-
-      
     });
     m_visionThread.setDaemon(true);
     m_visionThread.start();
