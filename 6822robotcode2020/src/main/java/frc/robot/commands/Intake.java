@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-/*public class Intake extends Command {
+public class Intake extends Command {
     private int timecounter = 0;
     private final int endtime = 30;
     
@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     @Override
     protected void initialize() {
         if(timecounter == 0) {
-            Robot.leftSide.set(DoubleSolenoid.Value.kReverse);
-            Robot.rightSide.set(DoubleSolenoid.Value.kReverse);
+            Robot.solenoid.set(DoubleSolenoid.Value.kReverse);
+            //Robot.rightSide.set(DoubleSolenoid.Value.kReverse);
         }
         if(Robot.testing){
             SmartDashboard.putString("pogyes?: ", "BEGIN");
@@ -33,8 +33,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     protected void execute() {
         timecounter++;
         if(timecounter > endtime) {
-            Robot.leftSide.set(DoubleSolenoid.Value.kForward);
-            Robot.rightSide.set(DoubleSolenoid.Value.kForward);
+            Robot.solenoid.set(DoubleSolenoid.Value.kForward);
+            //Robot.rightSide.set(DoubleSolenoid.Value.kForward);
             if(Robot.testing){
                 //SmartDashboard.putString("pogyes?: ", "pog");
             }
@@ -60,8 +60,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.leftSide.set(DoubleSolenoid.Value.kForward);
-        Robot.rightSide.set(DoubleSolenoid.Value.kForward);
+        Robot.solenoid.set(DoubleSolenoid.Value.kForward);
+        //Robot.rightSide.set(DoubleSolenoid.Value.kForward);
         timecounter = 0;
         if(Robot.testing){
             //SmartDashboard.putNumber("timecounter", 0);
@@ -74,4 +74,4 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     protected void interrupted() {
     	Robot.m_dropper.setState("Off");
     }
-}*/
+}

@@ -92,8 +92,8 @@ public class Robot extends TimedRobot {
   public static StorageFeed m_storage;
   public static Turret m_turret;
     
-//public static DoubleSolenoid leftSide = new DoubleSolenoid(3, 4);
-//public static DoubleSolenoid rightSide = new DoubleSolenoid(4,5);
+  public static DoubleSolenoid solenoid = new DoubleSolenoid(4, 3);
+  //public static DoubleSolenoid rightSide = new DoubleSolenoid(4,5);
 
   public static OI m_oi;
   public static Thread m_visionThread;
@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
   //public static final AnalogInput m_ultrasonic0 = new AnalogInput(kUltrasonicPort0);
 
   
-  //public static IntakeDropper m_dropper = new IntakeDropper();
+  public static IntakeDropper m_dropper = new IntakeDropper();
 
   public static boolean testing;
   private static final String kDefaultAuto = "Default";
@@ -311,7 +311,8 @@ public class Robot extends TimedRobot {
     cont++; 
     //System.out.println("teleop running");
     Scheduler.getInstance().run();
-    
+    //Robot.solenoid.set(DoubleSolenoid.Value.kForward);
+    //Robot.rightSide.set(DoubleSolenoid.Value.kForward);
     /*System.out.println(arm1.getSelectedSensorPosition(0));
     if(Math.abs(arm1.getSelectedSensorPosition(0))<40000)
     {
