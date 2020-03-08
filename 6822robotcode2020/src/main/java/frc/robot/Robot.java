@@ -98,10 +98,10 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static Thread m_visionThread;
   public static CvSink cvSink;
-
+  public static CvSource outputStream;
   public static GripPipeline pipeline;
-  public static final int imgWidth = 640;
-  public static final int imgHeight = 480;
+  public static final int imgWidth = 320;
+  public static final int imgHeight = 240;
 
   //public static final int kUltrasonicPort0 = 0;
   //public static final int kUltrasonicPort1 = 1;
@@ -176,19 +176,50 @@ public class Robot extends TimedRobot {
 
     m_oi = new OI();
 
+    VisionHelper.initializeDistanceTable();
+
     m_visionThread = new Thread(() -> {
       camera = CameraServer.getInstance().startAutomaticCapture();
-      camera.setResolution(640, 480);
+      camera.setResolution(imgWidth, imgHeight);
       cvSink = CameraServer.getInstance().getVideo();
-      CvSource outputStream = CameraServer.getInstance().putVideo("Rectangle", 640, 480);
+      outputStream = CameraServer.getInstance().putVideo("Rectangle", imgWidth, imgHeight);
       img = new Mat();
       while (!Thread.interrupted()) {
         if (cvSink.grabFrame(img) == 0) {
           outputStream.notifyError(cvSink.getError());
           continue;
         }
+        pipeline.process(img);
+        ArrayList<MatOfPoint> contours  = pipeline.filterContoursOutput();
+        if(contours.size()>0)
+        {
+          int index = 0;
+          int largestArea = 0;
+          for (int i = 0; i < contours.size(); i++) {
+              Rect boundingRect = Imgproc.boundingRect(contours.get(i));
+              if (boundingRect.width * boundingRect.height > largestArea) {
+                  index = i;
+                  largestArea = boundingRect.width * boundingRect.height;
+              }
+          }
+          Imgproc.drawContours(img, contours,index, new Scalar(0,0,255),3);
+          /*for(int i=0;i<contours.size();i++)
+          {
+            Imgproc.drawContours(img, contours,i, new Scalar(0,0,255),3);
+          }*/
+          SmartDashboard.putNumber("Width Dist", VisionHelper.visionDistanceWidth(contours.get(index)));
+          SmartDashboard.putNumber("Height Dist", VisionHelper.visionDistanceHeight(contours.get(index)));
+          SmartDashboard.putNumber("Distance", VisionHelper.averageVisionDistance(contours.get(index)));
+          double distInMeters = VisionHelper.averageVisionDistance(contours.get(index))/100.0;
+          SmartDashboard.putNumber("Shooter Speed", VisionHelper.getShooterSpeed(distInMeters));
+        }
         outputStream.putFrame(img);
       }
+      if(Thread.interrupted())
+      {
+        System.out.println("Vision Crashed");
+      }
+      
     });
     m_visionThread.setDaemon(true);
     m_visionThread.start();
@@ -203,18 +234,24 @@ public class Robot extends TimedRobot {
     arm1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     arm1.setSelectedSensorPosition(0);
     arm2 = new WPI_VictorSPX(11); // done
-    arm1.setSelectedSensorPosition(0);
 
     shoot1 = new WPI_TalonSRX(6); //done
     shoot2 = new WPI_VictorSPX(7); // done
 
     shoot1.configPeakCurrentLimit(60);
     shoot1.configContinuousCurrentLimit(28);
+    shoot1.setNeutralMode(NeutralMode.Coast);
+    shoot2.setNeutralMode(NeutralMode.Coast);
 
     drive1 = new WPI_TalonFX(1); //done
     slave1 = new WPI_TalonFX(2); //done
     drive2 = new WPI_TalonFX(3); // done
     slave2 = new WPI_TalonFX(4); //done
+
+    drive1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    drive2.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    drive1.setSelectedSensorPosition(0);
+    drive2.setSelectedSensorPosition(0);
 
     turret = new WPI_TalonSRX(5); // not done yet
     m_turret = new Turret(turret);
@@ -272,7 +309,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     cont++; 
-    
+    //System.out.println("teleop running");
     Scheduler.getInstance().run();
     
     /*System.out.println(arm1.getSelectedSensorPosition(0));

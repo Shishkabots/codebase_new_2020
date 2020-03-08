@@ -3,6 +3,8 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import org.opencv.core.CvException;
+import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
@@ -32,19 +34,28 @@ public class VisionHelper {
     return centerCoor;
   }
 
-  public static MatOfPoint getLargestContour(MatOfPoint mat) {
-    Robot.pipeline.process(mat);
-    ArrayList<MatOfPoint> contours = Robot.pipeline.filterContoursOutput();
-    int index = 0;
-    int largestArea = 0;
-    for (int i = 0; i < contours.size(); i++) {
-      Rect boundingRect = Imgproc.boundingRect(contours.get(i));
-      if (boundingRect.width * boundingRect.height > largestArea) {
-        index = i;
-        largestArea = boundingRect.width * boundingRect.height;
+  public static MatOfPoint getLargestContour(Mat mat) {
+    try{
+      Robot.pipeline.process(mat);
+      ArrayList<MatOfPoint> contours = Robot.pipeline.filterContoursOutput();
+      if(contours.size()>0)
+        {int index = 0;
+        int largestArea = 0;
+        for (int i = 0; i < contours.size(); i++) {
+          Rect boundingRect = Imgproc.boundingRect(contours.get(i));
+          if (boundingRect.width * boundingRect.height > largestArea) {
+            index = i;
+            largestArea = boundingRect.width * boundingRect.height;
+          }
+        }
+        return contours.get(index);
       }
     }
-    return contours.get(index);
+    catch(CvException e)
+    {
+      System.out.println("fail");
+    }
+    return null;
   }
 
   public static double visionDistanceWidth(MatOfPoint contour) {
@@ -52,21 +63,24 @@ public class VisionHelper {
     double TPixelsHeight = Imgproc.boundingRect(contour).height;
     double TPixelRatio = 1.0 * TPixelsHeight / TPixelsWidth;
     // System.out.println("/n"+TPixelRatio+" "+Tratio);
-    double factor = 0.375 * (TPixelRatio / Tratio - 1) + 1;
+    double factor = 0.5 * (TPixelRatio / Tratio - 1) + 1;
     TPixelsWidth = TPixelsWidth * factor;
     double distX = (TcmWidth * FOVpixelWidth) / (2 * TPixelsWidth * Math.tan(FOVAngleWidth));
-    return (1 * distX) - (distX * - 0.2367765961928018 + 79.99503478331746);
+    return (1.1 * distX);
+    //return (1 * distX) - (distX * - 0.2367765961928018 + 79.99503478331746);
   }
 
   public static double visionDistanceHeight(MatOfPoint contour) {
     double TPixelsHeight = Imgproc.boundingRect(contour).height;
     double distY = (TcmHeight * FOVpixelHeight) / (2 * TPixelsHeight * Math.tan(FOVAngleHeight));
-    return (1 * distY) - (distY * -0.42008428032422024 + 83.9420165461663);
+    return (1.2 * distY);
+    //return (1 * distY) - (distY * -0.42008428032422024 + 83.9420165461663);
   }
 
   public static double averageVisionDistance(MatOfPoint contour) {
     double measuredDistance = (visionDistanceHeight(contour) + visionDistanceWidth(contour)) / 2.0;
-    return  measuredDistance - (-0.11626697954008355 * measuredDistance + 27.101836829039314);
+    return  Math.sqrt(Math.pow(measuredDistance,2)-1.5*1.5);
+    //return  Math.sqrt(Math.pow(measuredDistance - (-0.11626697954008355 * measuredDistance + 27.101836829039314),2)-1.5*1.5);
   }
 
   public static void initializeDistanceTable() {
@@ -1089,12 +1103,17 @@ public class VisionHelper {
 
   }
 
+  /*
+  gets the shooter speed in m/s
+  */
   public static double getShooterSpeed(double distance) {
     distance = (int) (distance * 1000) / (1000.0);
     if (distances.containsKey(distance)) {
       return distances.get(distance);
-    } else if (distance > 0.6 && distance < 9.2) {
-      double lowKey = distances.floorKey(distance), highKey = distances.ceilingKey(distance);
+    } else if (distance > 1.0 && distance < 11.0) {
+      System.out.println(distance);
+      double lowKey = distances.floorKey(distance);
+      double highKey = distances.ceilingKey(distance);
       return (distances.get(lowKey) + distances.get(highKey)) / 2;
     }
     return -1;

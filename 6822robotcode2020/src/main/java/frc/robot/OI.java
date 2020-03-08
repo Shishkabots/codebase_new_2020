@@ -47,6 +47,6 @@ public class OI {
       stopRobot.whenPressed(new StopRobot());
       stopTurning.whenPressed(new StopTurning());
       flashColor.whenPressed(new Flash());
-      turretAlignButton.whenPressed(new AlignShooter(Robot.img)); // includes all of the commands in the align shooter command group
+      turretAlignButton.whenPressed(new ShooterMacro()); // includes all of the commands in the align shooter command group
     }
 }

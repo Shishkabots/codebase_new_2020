@@ -29,6 +29,7 @@ public class TurnTurret extends Command {
   @Override
   protected void execute() {
     double turnAxis = Robot.m_oi.controllerTwo.getRawAxis(4);
+    //System.out.println(turnAxis);
     double turnCoef = 0.4;
     Robot.m_turret.rotate(turnCoef * turnAxis);
   }
