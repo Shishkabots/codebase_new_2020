@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class Intake extends Command {
     private int timecounter = 0;
-    private final int endtime = 30;
+    private final int endtime = 100;
     
     public Intake() {
        timecounter = 0;
@@ -20,7 +20,6 @@ public class Intake extends Command {
     protected void initialize() {
         if(timecounter == 0) {
             Robot.solenoid.set(DoubleSolenoid.Value.kReverse);
-            //Robot.rightSide.set(DoubleSolenoid.Value.kReverse);
         }
         if(Robot.testing){
             SmartDashboard.putString("pogyes?: ", "BEGIN");
@@ -60,7 +59,7 @@ public class Intake extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        Robot.solenoid.set(DoubleSolenoid.Value.kForward);
+        Robot.solenoid.set(DoubleSolenoid.Value.kReverse);
         //Robot.rightSide.set(DoubleSolenoid.Value.kForward);
         timecounter = 0;
         if(Robot.testing){

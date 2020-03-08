@@ -290,7 +290,7 @@ public class Robot extends TimedRobot {
     }*/
     arm1.setSelectedSensorPosition(0);
     new TeleOpCommands().start();
-    
+    Robot.solenoid.set(DoubleSolenoid.Value.kReverse);
     //new VisionProcess().start();
   }
 
