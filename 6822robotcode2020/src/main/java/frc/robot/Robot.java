@@ -225,8 +225,8 @@ public class Robot extends TimedRobot {
     m_visionThread.setDaemon(true);
     m_visionThread.start();
 
-    climb1 = new WPI_VictorSPX(9); // done
-    climb2 = new WPI_VictorSPX(10); // done
+    climb1 = new WPI_VictorSPX(8); // done
+    climb2 = new WPI_VictorSPX(9); // done
 
     storage = new WPI_VictorSPX(12); // done
     intake = new WPI_VictorSPX(8); // done
@@ -291,8 +291,9 @@ public class Robot extends TimedRobot {
     }*/
     arm1.setSelectedSensorPosition(0);
     new TeleOpCommands().start();
+    climb2.set(0.25);
     Robot.solenoid.set(DoubleSolenoid.Value.kReverse);
-    //new VisionProcess().start();
+    //new VisionProcess().start();v
   }
 
   @Override
@@ -312,6 +313,9 @@ public class Robot extends TimedRobot {
     cont++; 
     //System.out.println("teleop running");
     Scheduler.getInstance().run();
+    //NetworkTableEntry rectTest = nTable.getEntry("Rect");
+    //double val = rectTest.getValue();
+    //SmartDashboard.putNumber("Bounding rect width: ", val);
     //Robot.solenoid.set(DoubleSolenoid.Value.kForward);
     //Robot.rightSide.set(DoubleSolenoid.Value.kForward);
     /*System.out.println(arm1.getSelectedSensorPosition(0));
