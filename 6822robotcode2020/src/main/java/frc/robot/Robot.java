@@ -289,10 +289,10 @@ public class Robot extends TimedRobot {
     /*if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }*/
-    arm1.setSelectedSensorPosition(0);
+    /*arm1.setSelectedSensorPosition(0);
     new TeleOpCommands().start();
     climb2.set(0.25);
-    Robot.solenoid.set(DoubleSolenoid.Value.kReverse);
+    Robot.solenoid.set(DoubleSolenoid.Value.kReverse);*/
     //new VisionProcess().start();v
   }
 
@@ -313,9 +313,11 @@ public class Robot extends TimedRobot {
     cont++; 
     //System.out.println("teleop running");
     Scheduler.getInstance().run();
-    //NetworkTableEntry rectTest = nTable.getEntry("Rect");
-    //double val = rectTest.getValue();
-    //SmartDashboard.putNumber("Bounding rect width: ", val);
+    NetworkTableEntry rectTest = nTable.getEntry("Rect");
+    String s = rectTest.getString("failure");
+    //NetworkTableValue val = rectTest.getValue();
+    //Rect r = (Rect) val.getValue();
+    SmartDashboard.putString("Bounding rect width: ", s); 
     //Robot.solenoid.set(DoubleSolenoid.Value.kForward);
     //Robot.rightSide.set(DoubleSolenoid.Value.kForward);
     /*System.out.println(arm1.getSelectedSensorPosition(0));
