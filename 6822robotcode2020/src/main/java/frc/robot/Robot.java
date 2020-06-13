@@ -313,9 +313,11 @@ public class Robot extends TimedRobot {
     cont++; 
     //System.out.println("teleop running");
     Scheduler.getInstance().run();
-    //NetworkTableEntry rectTest = nTable.getEntry("Rect");
-    //double val = rectTest.getValue();
-    //SmartDashboard.putNumber("Bounding rect width: ", val);
+    NetworkTableEntry rectTest = nTable.getEntry("Rect"); //object created from key "rect"
+    NetworkTableValue val = rectTest.getValue(); // accesses the values of the object
+    Rect r = (Rect) val.getValue(); // rectangle obj with accessible properties
+    SmartDashboard.putNumber("Bounding rect width: ", r.width);
+    SmartDashboard.putNumber("Bounding rect height: ", r.height);
     //Robot.solenoid.set(DoubleSolenoid.Value.kForward);
     //Robot.rightSide.set(DoubleSolenoid.Value.kForward);
     /*System.out.println(arm1.getSelectedSensorPosition(0));
